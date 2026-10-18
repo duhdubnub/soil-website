@@ -8,7 +8,7 @@ const top=eventPage?'event-top':'main';
 const canonical=new URL(Astro.url.pathname,Astro.site);
 
 // Each nav entry is its own page; Home is the site root.
-const nav=[['Home','home'],['About','about'],['Community','community'],['Tournaments','tournaments'],['Team','team'],['Join','join'],['Contact','contact']];
+const nav=[['Home','home'],['About','about'],['Community','community'],['Tournaments','tournaments'],['Join','join'],['Contact','contact']];
 const pageUrl=(id:string)=>id==='home'?`${base}/`:`${base}/${id}/`;
 ---
 <!doctype html>
@@ -35,8 +35,5 @@ let scheduled=false;
 function updateActive(){const offset=(document.querySelector('.site-header')?.getBoundingClientRect().height??84)+(document.querySelector('.event-nav')?.getBoundingClientRect().height??0)+40;let current=sections[0]?.id;for(const section of sections){if(section.getBoundingClientRect().top<=offset)current=section.id}if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-4)current=sections.at(-1)?.id;for(const link of links){if(link.dataset.eventLink===current)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current')}scheduled=false}
 if(links.length){window.addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(updateActive)}},{passive:true});window.addEventListener('resize',updateActive);window.addEventListener('hashchange',updateActive);updateActive()}
 // Native anchors retain URL hashes and work without JavaScript.
-// Only off-screen content is animated, leaving initial and deep-linked content visible.
-const motion=matchMedia('(prefers-reduced-motion: reduce)');
-if(!motion.matches&&'IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>{for(const entry of entries){if(entry.isIntersecting){entry.target.classList.remove('reveal-pending');observer.unobserve(entry.target)}}},{threshold:0.08});document.querySelectorAll<HTMLElement>('.reveal').forEach(element=>{if(element.getBoundingClientRect().top>innerHeight){element.classList.add('reveal-pending');observer.observe(element)}});motion.addEventListener('change',()=>{if(motion.matches){document.querySelectorAll('.reveal-pending').forEach(el=>el.classList.remove('reveal-pending'));observer.disconnect()}})}
 </script>
 </body></html>

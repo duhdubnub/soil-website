@@ -1,6 +1,6 @@
 # soil-website
 
-Science Olympiad at Illinois (SOIL): an Astro + Tailwind website with separate Home, About, Community, Tournaments, Team, Join, and Contact pages plus an invitational details page. The original repository title is preserved above.
+Science Olympiad at Illinois (SOIL): an Astro + Tailwind website with separate Home, About, Community, Tournaments, Join, and Contact pages plus an invitational details page. The original repository title is preserved above.
 
 ## Local setup and checks
 
@@ -13,7 +13,7 @@ npm run build
 npm test
 ```
 
-Open http://127.0.0.1:4322/soil-website/ (or the exact port printed by Astro if occupied). `npm run preview` serves the production build. The site has seven pages, in navigation order: Home (`/soil-website/`), About (`/soil-website/about/`), Community (`/soil-website/community/`), Tournaments (`/soil-website/tournaments/`), Team (`/soil-website/team/`), Join (`/soil-website/join/`), and Contact (`/soil-website/contact/`). The dedicated event page is at `/soil-website/invitational/`.
+Open http://127.0.0.1:4322/soil-website/ (or the exact port printed by Astro if occupied). `npm run preview` serves the production build. The site has six pages, in navigation order: Home (`/soil-website/`), About (`/soil-website/about/`, which also holds the officer Team block at `#team`), Community (`/soil-website/community/`), Tournaments (`/soil-website/tournaments/`), Join (`/soil-website/join/`), and Contact (`/soil-website/contact/`). The dedicated event page is at `/soil-website/invitational/`.
 
 `npm test` checks every page, one section and one H1 per page, navigation order and current-page marking, canonical URLs, anchor targets and asset paths, unique IDs, naming, Hero mission and About mission statement text, metadata, notices, hero content order, no floating labels/forms, and the three Join destinations with accessible names and safe new-tab attributes. Browser interaction and Lighthouse audits are separate; 90+ is a target, not an asserted measured score.
 
@@ -27,15 +27,16 @@ Edit `src/data/site.json`. General club links are centralized here; tournament-s
 - `officers`: `{ "name": "...", "role": "...", "photo": "/officers/name.webp", "email": "" }`. Put approved images under `public/officers/`; local paths receive the deployment base automatically. Photo and email are optional. Obtain consent before publication.
 - `mission`: short Hero summary, rendered verbatim in Hero.
 - `missionStatement`: the club's official mission statement, rendered verbatim at the top of About. Keep the University naming rule: write "University of Illinois", not "UIUC".
-- `about`: Science Olympiad explanation, independent RSO identity, story, and history TODO.
-- `activities`: four card titles and descriptions. No labels, numbering, tags, or slogans are displayed.
+- `communityImpact`: summary shown on the Home page's Community Impact card.
+- `about`: Science Olympiad explanation, independent RSO identity, story, and history TODO. Only `about.science` is rendered: the About page shows the mission statement beside "What is Science Olympiad?", then the `links`, then the officer Team block from `officers`. The other fields are kept for possible reuse.
+- `activities`: four card titles and descriptions, retained but not currently rendered.
 - `stats`: retained for future verified figures but not rendered. An impact strip is optional; do not publish unsupported totals.
 
-Section components live in `src/components/sections/`. Each page in `src/pages/` (`index.astro` for Home, then `about.astro`, `community.astro`, `tournaments.astro`, `team.astro`, `join.astro`, `contact.astro`) renders one section inside the shared layout and passes its `page` name so navigation can mark it current. Home also renders `HomeHighlights.astro` below the hero: a Community Impact card linking to the Community page, and a card for the featured tournament (name and description from `src/data/tournaments.json`) whose Info + Register button links to the Tournaments page. The Community Impact card text and the Community page are `[TODO]` placeholders until the club supplies approved wording. Each section's heading is that page's H1 with the `page-title` class, which keeps the original section heading size. Navigation, metadata, footer, and menu behavior are in `src/layouts/Layout.astro`; styles are in `src/styles/global.css`.
+Section components live in `src/components/sections/`. Each page in `src/pages/` (`index.astro` for Home, then `about.astro`, `community.astro`, `tournaments.astro`, `join.astro`, `contact.astro`) renders one section inside the shared layout and passes its `page` name so navigation can mark it current. Home also renders `HomeHighlights.astro` below the hero: a Community Impact card (text from `communityImpact` in `src/data/site.json`) linking to the Community page, and a card for the featured tournament (name and description from `src/data/tournaments.json`) whose Info + Register button links to the Tournaments page. The Community page is a `[TODO]` placeholder until the club supplies approved wording. Each section's heading is that page's H1 with the `page-title` class, which keeps the original section heading size. Navigation, metadata, footer, and menu behavior are in `src/layouts/Layout.astro`; styles are in `src/styles/global.css`.
 
 ## Editing tournaments
 
-`src/data/tournaments.json` contains a `tournaments` array. The first entry is the featured 2027 SOIL Satellite Invitational. It appears on the Tournaments page (`/soil-website/tournaments/`) and in the Home highlight card. Tournaments sits between Community and Team in navigation, the mobile menu, and footer quick links. The invitational details page marks Tournaments as the current page and links back to it.
+`src/data/tournaments.json` contains a `tournaments` array. The first entry is the featured 2027 SOIL Satellite Invitational. It appears on the Tournaments page (`/soil-website/tournaments/`) and in the Home highlight card. Tournaments sits between Community and Join in navigation, the mobile menu, and footer quick links. The invitational details page marks Tournaments as the current page and links back to it.
 
 | Field | What to supply / empty behavior |
 | --- | --- |
@@ -67,9 +68,9 @@ Discord and Instagram glyphs come from Simple Icons (CC0), with the license save
 
 ## Navigation and accessibility
 
-The sticky header links to each page (`/soil-website/`, `/soil-website/about/`, `/soil-website/community/`, `/soil-website/tournaments/`, `/soil-website/team/`, `/soil-website/join/`, `/soil-website/contact/`) and marks the current one with `aria-current="page"`. Only the invitational page keeps an in-page sub-navigation, whose scroll spy updates `aria-current="location"`. The mobile menu closes after a navigation link or Escape; Escape returns focus to its button. Desktop resizing clears mobile state.
+The sticky header links to each page (`/soil-website/`, `/soil-website/about/`, `/soil-website/community/`, `/soil-website/tournaments/`, `/soil-website/join/`, `/soil-website/contact/`) and marks the current one with `aria-current="page"`. Only the invitational page keeps an in-page sub-navigation, whose scroll spy updates `aria-current="location"`. The mobile menu closes after a navigation link or Escape; Escape returns focus to its button. Desktop resizing clears mobile state.
 
-Each page has one H1, a logical heading order, named sections, image alt text, visible keyboard focus, a skip link, and a back-to-top link. Reveal transitions apply only to initially off-screen content. Reduced motion disables smooth scrolling and reveals, including preference changes during a visit. Without JavaScript all content remains visible. No analytics, cookies, backend, or submission storage are implemented.
+Each page has one H1, a logical heading order, named sections, image alt text, visible keyboard focus, a skip link, and a back-to-top link. Content appears immediately with no scroll-triggered reveal animations. Reduced motion disables smooth scrolling and other transitions. Without JavaScript all content remains visible. No analytics, cookies, backend, or submission storage are implemented.
 
 ## GitHub Pages
 

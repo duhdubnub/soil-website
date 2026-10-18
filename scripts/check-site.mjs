@@ -5,7 +5,7 @@ import './check-tournaments.mjs';
 const data=JSON.parse(readFileSync('src/data/site.json','utf8'));
 const files=(dir)=>readdirSync(dir,{withFileTypes:true}).flatMap(f=>f.isDirectory()?files(join(dir,f.name)):[join(dir,f.name)]);
 // One page per main navigation entry, plus the invitational details page.
-const order=['home','about','community','tournaments','team','join','contact'];
+const order=['home','about','community','tournaments','join','contact'];
 const url=(id)=>id==='home'?'/soil-website/':`/soil-website/${id}/`;
 const pages=Object.fromEntries(order.map(id=>[id,readFileSync(id==='home'?'dist/index.html':`dist/${id}/index.html`,'utf8')]));
 assert.equal(files('dist').filter(f=>f.endsWith('.html')).length,order.length+1,'Main pages and invitational page');
@@ -36,6 +36,12 @@ for(const [id,html] of Object.entries(pages)){
 const all=Object.values(pages).join('');
 assert.equal(all.split(data.mission).length-1,1,'Verbatim mission in hero');
 assert.equal(pages.about.split(data.missionStatement).length-1,1,'Verbatim mission statement in About');
+const aboutGrid=pages.about.match(/<div class="about-grid[\s\S]*?<\/div><\/div><\/div>/)[0];
+assert(aboutGrid.indexOf(data.missionStatement)<aboutGrid.indexOf('What is Science Olympiad?')&&aboutGrid.includes(data.about.science),'Mission statement beside What is Science Olympiad?');
+for(const link of data.links)assert(pages.about.includes(`href="${link.url}"`),`About resource link ${link.label}`);
+assert(!/about-columns|activity-grid/.test(pages.about),'About shows only mission, Science Olympiad summary, resource links, and team');
+assert(pages.about.indexOf('class="resource-row')<pages.about.indexOf('id="team"')&&pages.about.includes('class="team-grid'),'Team follows About resource links');
+assert(!all.includes('/soil-website/team/')&&!existsSync('dist/team'),'No standalone Team page');
 const hero=pages.home.match(/<section id="home"[\s\S]*?<\/section>/)[0];
 assert(hero.indexOf('hero-logo')<hero.indexOf('<h1')&&hero.indexOf('<h1')<hero.indexOf('hero-mission')&&hero.indexOf('hero-mission')<hero.indexOf('hero-actions'),'Hero order');
 assert.equal((hero.match(/<p\b/g)||[]).length,1,'Only mission paragraph in hero');
@@ -60,8 +66,9 @@ const featured=tournaments.find(t=>t.featured)??tournaments[0];
 const cards=[...highlights.matchAll(/<article class="highlight-card[\s\S]*?<\/article>/g)].map(m=>m[0]);
 assert.equal(cards.length,2,'Two highlight cards');
 assert(cards[0].includes('Community Impact')&&cards[0].includes('href="/soil-website/community/"'),'Community Impact card links to Community page');
+assert(cards[0].includes(data.communityImpact.replaceAll("'",'&#39;'))&&!cards[0].includes('TODO'),'Community Impact card text');
 assert(cards[1].includes(featured.name)&&cards[1].includes('href="/soil-website/tournaments/"')&&cards[1].includes('Info + Register'),'Tournament card links to Tournaments page');
-console.log('Passed: seven pages, page navigation, home highlights, tournament pending states, hero, join links and compliance copy.');
+console.log('Passed: six pages, page navigation, home highlights, tournament pending states, hero, join links and compliance copy.');
 
 const detail=readFileSync('dist/invitational/index.html','utf8');
 assert(detail.includes('<title>2027 SOIL Satellite Invitational | Science Olympiad at Illinois</title>'));
