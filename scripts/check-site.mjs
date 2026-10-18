@@ -9,7 +9,8 @@ assert.equal(files('dist').filter(f=>f.endsWith('.html')).length,2,'Home and inv
 const sections=[...html.matchAll(/<section\b[^>]*\bid="([^"]+)"/g)].map(m=>m[1]);
 assert.deepEqual(sections,['home','about','tournaments','team','join','contact'],'Required section order');
 assert.equal((html.match(/<h1\b/g)||[]).length,1,'One h1');
-assert.equal(html.split(data.mission).length-1,2,'Verbatim mission in hero and About');
+assert.equal(html.split(data.mission).length-1,1,'Verbatim mission in hero');
+assert.equal(html.split(data.missionStatement).length-1,1,'Verbatim mission statement in About');
 assert(!/UIUC|Fighting Illini|\bSciOly\b/i.test(html),'Naming restrictions');
 assert(!/(?<!Science )\bOlympiad\b/.test(html.replace(/<[^>]*>/g,'')),'Science Olympiad written in full');
 assert(html.includes('does not speak on behalf of the university.'),'RSO notice');

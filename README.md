@@ -15,7 +15,7 @@ npm test
 
 Open http://127.0.0.1:4322/soil-website/ (or the exact port printed by Astro if occupied). `npm run preview` serves the production build. The home page has six sections in order: Home, About, Tournaments, Team, Join, Contact. The dedicated event page is at `/soil-website/invitational/`.
 
-`npm test` checks both pages, section order, anchor targets and asset paths, unique IDs, naming, mission text twice, metadata, notices, hero content order, no floating labels/forms, and the three Join destinations with accessible names and safe new-tab attributes. Browser interaction and Lighthouse audits are separate; 90+ is a target, not an asserted measured score.
+`npm test` checks both pages, section order, anchor targets and asset paths, unique IDs, naming, Hero mission and About mission statement text, metadata, notices, hero content order, no floating labels/forms, and the three Join destinations with accessible names and safe new-tab attributes. Browser interaction and Lighthouse audits are separate; 90+ is a target, not an asserted measured score.
 
 ## Edit content and links
 
@@ -25,7 +25,8 @@ Edit `src/data/site.json`. General club links are centralized here; tournament-s
 - `links`: National Science Olympiad and Illinois Science Olympiad resource labels and URLs, shared by About and footer.
 - `email`: public club email. Leave empty until confirmed; the site displays `[TODO: public club email]`. A nonempty value creates a real `mailto:` link. Do not invent an email or create an invalid placeholder mailto link.
 - `officers`: `{ "name": "...", "role": "...", "photo": "/officers/name.webp", "email": "" }`. Put approved images under `public/officers/`; local paths receive the deployment base automatically. Photo and email are optional. Obtain consent before publication.
-- `mission`: approved mission, rendered verbatim in Hero and About.
+- `mission`: short Hero summary, rendered verbatim in Hero.
+- `missionStatement`: the club's official mission statement, rendered verbatim at the top of About. Keep the University naming rule: write "University of Illinois", not "UIUC".
 - `about`: Science Olympiad explanation, independent RSO identity, story, and history TODO.
 - `activities`: four card titles and descriptions. No labels, numbering, tags, or slogans are displayed.
 - `stats`: retained for future verified figures but not rendered. An impact strip is optional; do not publish unsupported totals.
