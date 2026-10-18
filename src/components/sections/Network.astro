@@ -1,0 +1,4 @@
+---
+import data from '../../data/site.json';
+---
+<section id="network" class="section navy" aria-labelledby="network-title" tabindex="-1"><div class="container reveal"><div class="section-heading"><div><p class="eyebrow">03 / ALUMNI & NETWORK</p><h2 id="network-title">The connection<br/>doesn’t end here.</h2></div><p>Keep your curiosity in good company.</p></div><div class="network-grid"><div><h3>For alumni</h3><p>{data.network.alumni}</p><a class="text-link" href="#contact">Connect with SOIL ↗</a></div><div><h3>For teachers & coaches</h3><p>{data.network.educators}</p><p class="todo">{data.network.todo}</p></div><div class="network-resources"><h3>The wider community</h3><p>Find official competition information and resources.</p>{data.links.map(link=><a href={link.url}>{link.label}<span aria-hidden="true">↗</span></a>)}</div></div></div></section>

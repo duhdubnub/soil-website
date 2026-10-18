@@ -1,21 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Join from '../components/Join.astro';
-import Events from '../components/Events.astro';
-import data from '../data/site.json';
-const base=import.meta.env.BASE_URL.replace(/\/$/,'');
+import Hero from '../components/sections/Hero.astro';
+import About from '../components/sections/About.astro';
+import Team from '../components/sections/Team.astro';
+import Network from '../components/sections/Network.astro';
+import Join from '../components/sections/Join.astro';
+import Contact from '../components/sections/Contact.astro';
 ---
-<Layout>
-<section class="discovery-hero">
-  <div class="science-field" aria-hidden="true"><div class="field-orbit orbit-a"></div><div class="field-orbit orbit-b"></div><div class="field-orbit orbit-c"></div><span class="field-particle particle-a"></span><span class="field-particle particle-b"></span><span class="field-particle particle-c"></span><span class="field-cross cross-a">+</span><span class="field-cross cross-b">+</span></div>
-  <div class="container discovery-grid"><div class="discovery-copy"><p class="eyebrow">STUDENT-LED · CURIOSITY-DRIVEN</p><h1>Science Olympiad<br/><span>at Illinois</span></h1><p class="discovery-intro">Keep asking questions.<br/>Help the next generation find their answers.</p><div class="hero-actions"><a class="button button-orange" href={`${base}/get-involved/`}>Join the Club <span aria-hidden="true">↗</span></a><a class="button button-ghost" href={`${base}/events/`}>See Events <span aria-hidden="true">→</span></a></div></div><div class="emblem-stage"><div class="emblem-caption">SCIENCE. SERVICE. CONNECTION.</div><div class="emblem-frame"><img src={`${base}/logo.webp`} alt="SOIL club atom emblem, with symbols of science and engineering" width="400" height="400" fetchpriority="high"/></div><span class="emblem-footnote">SOIL <span aria-hidden="true">/</span> A COMMUNITY IN MOTION</span></div></div>
-  <div class="container discovery-bottom"><span>AT THE UNIVERSITY OF ILLINOIS URBANA-CHAMPAIGN</span><a href="#our-work">Explore SOIL <span aria-hidden="true">↓</span></a></div>
-</section>
-<nav class="section-nav" aria-label="On this page"><div class="container"><a href="#our-work">Our purpose</a><a href="#impact">Our impact</a><a href="#upcoming">Upcoming events</a><a href="#join">Get involved</a><a href="#questions">Questions</a></div></nav>
-<section id="our-work" class="section container"><div class="mission-grid"><div><p class="eyebrow">01 / OUR PURPOSE</p><h2>A love of science.<br/>A reason to give back.</h2><a class="text-link" href={`${base}/about/`}>Get to know SOIL <span aria-hidden="true">↗</span></a></div><p class="mission-statement">{data.mission}</p></div><div class="activity-grid">{data.activities.map((a,i)=><a class="activity-card" href={`${base}/${i===3?'alumni':'what-we-do'}/#${i===3?'network':`activity-${i+1}`}`}><div class="card-top"><span class="card-number">{a.icon}</span><span aria-hidden="true">↗</span></div><p class="micro-label">{a.tag}</p><h3>{a.title}</h3><p>{a.description}</p></a>)}</div></section>
-<section id="impact" class="impact"><div class="container impact-inner"><div><p class="eyebrow">SCIENCE HAS A RIPPLE EFFECT</p><h2>Our impact, together.</h2><p class="small">[TODO: verified impact totals]</p></div>{data.stats.map(s=><div class="stat"><span>{s.value}</span><p>{s.label}</p></div>)}</div></section>
-<section id="upcoming" class="section container"><div class="section-heading"><div><p class="eyebrow">02 / ON THE CALENDAR</p><h2>What’s coming up.</h2></div><a class="text-link" href={`${base}/events/`}>Events & meetings <span aria-hidden="true">↗</span></a></div><Events/><div class="calendar-note"><span>Looking for national or state competition information?</span><a href={`${base}/alumni/`}>Find official resources →</a></div></section>
-<section id="join" class="involvement-section"><div class="container section"><div class="section-heading"><div><p class="eyebrow">03 / FIND YOUR PART</p><h2>There’s more than one<br/>way to make a difference.</h2></div><p class="section-aside">Bring your knowledge, your perspective,<br/>and your curiosity. Start here.</p></div><div class="pathway-grid">{data.pathways.map(p=><article class="pathway"><span class="eyebrow">{p.audience}</span><h3>{p.title}</h3><p>{p.description}</p><a class="text-link" href={`${base}/${p.page}/`}>{p.action} <span aria-hidden="true">↗</span></a></article>)}</div></div></section>
-<section id="questions" class="section container faq-section"><div><p class="eyebrow">04 / GOOD QUESTIONS</p><h2>A little more<br/>about SOIL.</h2><p>Have something else in mind?</p><a class="text-link" href={`${base}/contact/`}>Connect with us ↗</a></div><div class="faq-list">{data.faqs.map(f=><details><summary>{f.question}<span aria-hidden="true">+</span></summary><p>{f.answer}</p></details>)}</div></section>
-<Join/>
-</Layout>
+<Layout><Hero/><About/><Team/><Network/><Join/><Contact/></Layout>

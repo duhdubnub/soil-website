@@ -1,23 +1,27 @@
-import { readFileSync, existsSync } from 'node:fs';
+import {readFileSync,existsSync,readdirSync} from 'node:fs';
 import assert from 'node:assert/strict';
-import { join } from 'node:path';
-const pages=['','about','what-we-do','events','get-involved','team','alumni','contact','legal'];
+import {join} from 'node:path';
+const html=readFileSync('dist/index.html','utf8');
 const data=JSON.parse(readFileSync('src/data/site.json','utf8'));
-for(const page of pages){
- const html=readFileSync(join('dist',page,'index.html'),'utf8');
- assert(!/UIUC|Fighting Illini|\bSciOly\b/i.test(html),`${page}: prohibited name`);
- assert(!/(?<!Science )\bOlympiad\b/.test(html.replace(/<[^>]*>/g,'')),`${page}: abbreviated Science Olympiad`);
- assert.equal((html.match(/<h1\b/g)||[]).length,1,`${page}: one H1`);
- assert(html.includes('does not speak on behalf of the university.'),`${page}: RSO notice`);
- assert(html.includes('This is not an official Science Olympiad, Inc. website.'),`${page}: trademark notice`);
- assert(html.includes('name="description"')&&html.includes('property="og:image"'),`${page}: metadata`);
- assert(html.includes('Skip to content'),`${page}: skip link`);
- for(const match of html.matchAll(/(?:href|src)="(\/[^"#?]*)(?:#[^"]*)?"/g)){
-  const path=match[1];assert(path.startsWith('/soil-website/'),`${page}: base path ${path}`);
-  const relative=path.slice('/soil-website/'.length);const target=join('dist',relative);
-  assert(existsSync(path.endsWith('/')?join(target,'index.html'):target),`${page}: missing link ${path}`);
- }
- for(const img of html.matchAll(/<img\b[^>]*>/g))assert(/\balt=/.test(img[0]),`${page}: image alt`);
- if(page===''||page==='about')assert(html.includes(data.mission),`${page}: exact mission`);
+const files=(dir)=>readdirSync(dir,{withFileTypes:true}).flatMap(f=>f.isDirectory()?files(join(dir,f.name)):[join(dir,f.name)]);
+assert.equal(files('dist').filter(f=>f.endsWith('.html')).length,1,'Exactly one HTML page');
+const sections=[...html.matchAll(/<section\b[^>]*\bid="([^"]+)"/g)].map(m=>m[1]);
+assert.deepEqual(sections,['home','about','team','network','join','contact'],'Required section order');
+assert.equal((html.match(/<h1\b/g)||[]).length,1,'One h1');
+assert.equal(html.split(data.mission).length-1,2,'Verbatim mission in hero and About');
+assert(!/UIUC|Fighting Illini|\bSciOly\b/i.test(html),'Naming restrictions');
+assert(!/(?<!Science )\bOlympiad\b/.test(html.replace(/<[^>]*>/g,'')),'Science Olympiad written in full');
+assert(html.includes('does not speak on behalf of the university.'),'RSO notice');
+assert(html.includes('This is not an official Science Olympiad, Inc. website.'),'Trademark notice');
+assert(html.includes('Skip to content')&&html.includes('aria-controls="navigation"'),'Navigation accessibility');
+assert(html.includes('property="og:image"')&&html.includes('name="description"'),'Metadata');
+const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
+assert.equal(new Set(ids).size,ids.length,'Unique IDs');
+for(const [,id] of html.matchAll(/href="#([^"]+)"/g))assert(ids.includes(id),`Anchor target ${id}`);
+for(const section of sections)assert(html.includes(`data-section="${section}"`),`Scroll spy link ${section}`);
+for(const [,path] of html.matchAll(/(?:href|src)="(\/[^"#?]*)(?:#[^"]*)?"/g)){
+ assert(path.startsWith('/soil-website/'),`Base path ${path}`);
+ const target=join('dist',path.slice('/soil-website/'.length));assert(existsSync(path.endsWith('/')?join(target,'index.html'):target),`Asset ${path}`);
 }
-console.log('Passed: 9 pages, local asset/page links, base paths, naming, mission, notices, metadata, H1s and image alt attributes.');
+for(const img of html.matchAll(/<img\b[^>]*>/g))assert(/\balt=/.test(img[0]),'Image alt attribute');
+console.log('Passed: one page, six ordered sections, all anchors/assets, exact mission twice, naming, notices, metadata, and navigation markup.');

@@ -1,28 +1,85 @@
 {
   "name": "Science Olympiad at Illinois",
   "mission": "Join Science Olympiad at Illinois to help run regional and state competitions, write and proctor exams, and mentor local teams while building real-world STEM skills, developing volunteer skills, and connecting with a national network of alumni and Illinois educators.",
-  "email": "", "signupUrl": "", "socials": [],
-  "pathways": [
-    {"audience":"FOR STUDENTS","title":"Join the community.","description":"Meet people who share your curiosity and explore ways to support Science Olympiad through SOIL.","action":"How to join","page":"get-involved"},
-    {"audience":"FOR VOLUNTEERS","title":"Put your skills to work.","description":"Explore competition support, exam writing, and proctoring. Find a contribution that fits your interests.","action":"Explore our work","page":"what-we-do"},
-    {"audience":"FOR ALUMNI & EDUCATORS","title":"Pass your experience on.","description":"Connect about mentoring local teams and helping students discover what they can do.","action":"Build a connection","page":"alumni"}
-  ],
-  "faqs": [
-    {"question":"What does SOIL do?","answer":"Science Olympiad at Illinois helps run regional and state competitions, write and proctor exams, and mentor local teams while connecting members with alumni and educators."},
-    {"question":"How can I get involved?","answer":"Start with the Get Involved page to explore joining and volunteering. The sign-up form and meeting details will be published once confirmed."},
-    {"question":"Where can I find meeting and event dates?","answer":"The Events page is the home for confirmed dates, locations, and details. The schedule is currently pending; no event dates have been announced on this website."},
-    {"question":"Can teachers, coaches, and alumni connect with SOIL?","answer":"Yes. Visit Alumni & Network to learn about possible mentoring and volunteer connections. Specific arrangements are coordinated with the club and confirmed individually."},
-    {"question":"Where should I look for official competition resources?","answer":"Use the national and state organization links on Alumni & Network for official resources. This independent student organization website does not reproduce competition rules or manuals."}
-  ],
+  "email": "",
+  "signupUrl": "",
+  "socials": [],
   "meeting": "[TODO: meeting time and location]",
-  "events": [], "pastEvents": [],
-  "officers": [{"name":"[TODO: officer name]","role":"[TODO: officer role]","photo":"","email":""}],
-  "stats": [{"label":"Competitions supported","value":"—"},{"label":"Volunteer hours","value":"—"},{"label":"Teams mentored","value":"—"}],
-  "links": [{"label":"National Science Olympiad","url":"https://www.soinc.org/"},{"label":"State Science Olympiad organization","url":"https://illinoisolympiad.org/"}],
+  "officers": [
+    {
+      "name": "[TODO: officer name]",
+      "role": "[TODO: officer role]",
+      "photo": "",
+      "email": ""
+    }
+  ],
+  "stats": [
+    {
+      "label": "Competitions supported",
+      "value": "—"
+    },
+    {
+      "label": "Volunteer hours",
+      "value": "—"
+    },
+    {
+      "label": "Teams mentored",
+      "value": "—"
+    }
+  ],
+  "links": [
+    {
+      "label": "National Science Olympiad",
+      "url": "https://www.soinc.org/"
+    },
+    {
+      "label": "State Science Olympiad organization",
+      "url": "https://illinoisolympiad.org/"
+    }
+  ],
   "activities": [
-    {"title":"Run Competitions","tag":"MAKE IT HAPPEN","icon":"01","description":"Help run regional and state competitions. Be part of the team that makes a great competition day possible.","detail":"Support tournament organizers with event preparation, logistics, and on-the-day volunteering. Specific assignments and opportunities will be shared once confirmed."},
-    {"title":"Write & Proctor Exams","tag":"SHARE WHAT YOU KNOW","icon":"02","description":"Turn your curiosity into thoughtful questions. Help write exams and support a fair testing experience.","detail":"Practice clear scientific communication through question development, review, and proctoring. Follow organizer guidance and keep unpublished competition materials confidential."},
-    {"title":"Mentor Local Teams","tag":"PASS IT FORWARD","icon":"03","description":"Help students explore STEM, work through challenges, and build confidence in their own ideas.","detail":"Support local teams and outreach with explanations, practice, and encouragement. Mentoring arrangements must be coordinated with coaches and approved by the club."},
-    {"title":"Alumni & Educator Network","tag":"STAY CONNECTED","icon":"04","description":"Connect with people who share your love of science, from fellow alumni to Illinois educators.","detail":"Exchange perspectives with alumni, teachers, and coaches. Share your experience and discover new ways to support the next generation of Science Olympiad participants."}
-  ]
+    {
+      "title": "Run Competitions",
+      "tag": "MAKE IT HAPPEN",
+      "icon": "01",
+      "description": "Help run regional and state competitions. Be part of the team that makes a great competition day possible.",
+      "detail": "Support tournament organizers with event preparation, logistics, and on-the-day volunteering. Specific assignments and opportunities will be shared once confirmed."
+    },
+    {
+      "title": "Write & Proctor Exams",
+      "tag": "SHARE WHAT YOU KNOW",
+      "icon": "02",
+      "description": "Turn your curiosity into thoughtful questions. Help write exams and support a fair testing experience.",
+      "detail": "Practice clear scientific communication through question development, review, and proctoring. Follow organizer guidance and keep unpublished competition materials confidential."
+    },
+    {
+      "title": "Mentor Local Teams",
+      "tag": "PASS IT FORWARD",
+      "icon": "03",
+      "description": "Help students explore STEM, work through challenges, and build confidence in their own ideas.",
+      "detail": "Support local teams and outreach with explanations, practice, and encouragement. Mentoring arrangements must be coordinated with coaches and approved by the club."
+    },
+    {
+      "title": "Skills You’ll Build",
+      "tag": "GROW THROUGH SERVICE",
+      "icon": "04",
+      "description": "Put STEM knowledge into practice while developing volunteer skills, scientific communication, teamwork, and leadership."
+    }
+  ],
+  "about": {
+    "science": "Science Olympiad brings students together through team-based science and engineering competition. Participants explore scientific knowledge, problem-solving, and hands-on skills.",
+    "identity": "Science Olympiad at Illinois is an independent Registered Student Organization at the University of Illinois Urbana-Champaign. We connect through STEM and service while supporting students and local teams.",
+    "story": "A shared interest in Science Olympiad connects our community. Our verified founding story and milestones will be added here.",
+    "historyTodo": "[TODO: founding history and verified milestones]"
+  },
+  "network": {
+    "alumni": "Stay connected to Science Olympiad by sharing your perspective, exploring volunteer opportunities, and supporting the next generation of students.",
+    "educators": "Illinois educators and local team coaches can connect with SOIL about possible mentoring and competition support. Arrangements are coordinated with coaches and confirmed individually.",
+    "todo": "[TODO: confirmed alumni and educator connection process]"
+  },
+  "join": {
+    "volunteering": "Help with regional and state competition support, exam writing and proctoring, or mentoring local teams. Specific opportunities depend on organizer needs and confirmed arrangements.",
+    "intro": "You might love explaining biology, solving an engineering problem, or making a competition run smoothly. Explore how your interests can contribute.",
+    "todo": "[TODO: confirm joining requirements, volunteer onboarding, and any eligibility restrictions]"
+  }
 }
