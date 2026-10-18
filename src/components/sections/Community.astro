@@ -1,0 +1,4 @@
+---
+import data from '../../data/site.json';
+---
+<section id="community" class="section" aria-labelledby="community-title" tabindex="-1"><div class="container"><div class="community-heading"><h1 id="community-title" class="page-title">Community</h1><p>{data.communityIntro}</p></div><div class="highlight-grid">{data.communityCards.map(card=><article class="highlight-card"><h2>{card.title}</h2><p>{card.description}{card.contactEmail&&<Fragment>{' '}{data.email?<a class="text-link" href={`mailto:${data.email}`}>{data.email}</a>:<span class="todo">[TODO: public club email]</span>}.</Fragment>}</p></article>)}</div></div></section>

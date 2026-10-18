@@ -1,6 +1,6 @@
 # soil-website
 
-Science Olympiad at Illinois (SOIL): an Astro + Tailwind website with a scrolling home page and invitational details page. The original repository title is preserved above.
+Science Olympiad at Illinois (SOIL): an Astro + Tailwind website with separate Home, About, Community, Tournaments, Join, and Contact pages plus an invitational details page. The original repository title is preserved above.
 
 ## Local setup and checks
 
@@ -13,9 +13,9 @@ npm run build
 npm test
 ```
 
-Open http://127.0.0.1:4322/soil-website/ (or the exact port printed by Astro if occupied). `npm run preview` serves the production build. The home page has six sections in order: Home, About, Tournaments, Team, Join, Contact. The dedicated event page is at `/soil-website/invitational/`.
+Open http://127.0.0.1:4322/soil-website/ (or the exact port printed by Astro if occupied). `npm run preview` serves the production build. The site has six pages, in navigation order: Home (`/soil-website/`), About (`/soil-website/about/`, which also holds the officer Team block at `#team`), Community (`/soil-website/community/`), Tournaments (`/soil-website/tournaments/`), Join (`/soil-website/join/`), and Contact (`/soil-website/contact/`). The dedicated event page is at `/soil-website/invitational/`.
 
-`npm test` checks both pages, section order, anchor targets and asset paths, unique IDs, naming, mission text twice, metadata, notices, hero content order, no floating labels/forms, and the three Join destinations with accessible names and safe new-tab attributes. Browser interaction and Lighthouse audits are separate; 90+ is a target, not an asserted measured score.
+`npm test` checks every page, one section and one H1 per page, navigation order and current-page marking, canonical URLs, anchor targets and asset paths, unique IDs, naming, Hero mission and About mission statement text, metadata, notices, hero content order, no floating labels/forms, and the three Join destinations with accessible names and safe new-tab attributes. Browser interaction and Lighthouse audits are separate; 90+ is a target, not an asserted measured score.
 
 ## Edit content and links
 
@@ -23,32 +23,38 @@ Edit `src/data/site.json`. General club links are centralized here; tournament-s
 
 - `joinLinks`: the three cards and footer icon links, in order. Fields: `id`, `icon` (local SVG filename without extension), `title`, `description`, `button`, `url`, and `primary`. The supplied OneIllinois link is primary, followed by Discord and Instagram. Keep the Instagram handle exact. All three destinations open in a new tab with `noopener noreferrer` and descriptive accessible names.
 - `links`: National Science Olympiad and Illinois Science Olympiad resource labels and URLs, shared by About and footer.
-- `email`: public club email. Leave empty until confirmed; the site displays `[TODO: public club email]`. A nonempty value creates a real `mailto:` link. Do not invent an email or create an invalid placeholder mailto link.
-- `officers`: `{ "name": "...", "role": "...", "photo": "/officers/name.webp", "email": "" }`. Put approved images under `public/officers/`; local paths receive the deployment base automatically. Photo and email are optional. Obtain consent before publication.
-- `mission`: approved mission, rendered verbatim in Hero and About.
-- `about`: Science Olympiad explanation, independent RSO identity, story, and history TODO.
-- `activities`: four card titles and descriptions. No labels, numbering, tags, or slogans are displayed.
+- `address`: club mailing address lines, shown in every page's footer beside the legal notices; the first line is bold.
+- `email`: public club email, shown on the Contact page and under the footer address. Leave empty until confirmed; the site displays `[TODO: public club email]`. A nonempty value creates a real `mailto:` link. Do not invent an email or create an invalid placeholder mailto link.
+- `officers`: `{ "name": "...", "role": "...", "favoriteEvent": "...", "favoriteMemory": "...", "photo": "/officers/name.webp", "email": "" }`, in display order. The About page's Team block shows four officer cards per row on desktop (two on tablets, one on phones); keep the favorites short so cards stay compact. Put approved images under `public/officers/` as portrait headshots (about 600px wide WebP; cards show a 4:5 frame anchored near the top, so keep the face in the upper half); local paths receive the deployment base automatically. Without a photo, the card shows the officer's initials. Favorites, photo, and email are optional. Obtain consent before publication. Write "Science Olympiad", never "SciOly".
+- `mission`: short Hero summary, rendered verbatim in Hero.
+- `missionStatement`: the club's official mission statement, rendered verbatim at the top of About. Keep the University naming rule: write "University of Illinois", not "UIUC".
+- `communityImpact`: summary shown on the Home page's Community Impact card.
+- `communityIntro`: short description under the Community page heading.
+- `communityCards`: the side-by-side cards on the Community page, each `{ "title": "...", "description": "..." }`. Add `"contactEmail": true` to end a card's description with the club `email` (or its `[TODO]` placeholder while `email` is empty).
+- `joinIntro`: description under the Get Involved heading on the Join page.
+- `about`: Science Olympiad explanation, independent RSO identity, story, and history TODO. Only `about.science` is rendered: the About page shows the mission statement beside "What is Science Olympiad?", then the `links`, then the officer Team block from `officers`. The other fields are kept for possible reuse.
+- `activities`: four card titles and descriptions, retained but not currently rendered.
 - `stats`: retained for future verified figures but not rendered. An impact strip is optional; do not publish unsupported totals.
 
-Section components live in `src/components/sections/`, assembled by `src/pages/index.astro`. Navigation, metadata, footer, and scroll behavior are in `src/layouts/Layout.astro`; styles are in `src/styles/global.css`.
+Section components live in `src/components/sections/`. Each page in `src/pages/` (`index.astro` for Home, then `about.astro`, `community.astro`, `tournaments.astro`, `join.astro`, `contact.astro`) renders one section inside the shared layout and passes its `page` name so navigation can mark it current. Home also renders `HomeHighlights.astro` below the hero: a Community Impact card (text from `communityImpact` in `src/data/site.json`) linking to the Community page, and a card for the featured tournament (name and description from `src/data/tournaments.json`) whose Info + Register button links to the Tournaments page. The Community page shows `communityIntro` under its heading, then the `communityCards` side by side (stacked on phones). Each section's heading is that page's H1 with the `page-title` class, which keeps the original section heading size. Navigation, metadata, footer, and menu behavior are in `src/layouts/Layout.astro`; styles are in `src/styles/global.css`.
 
 ## Editing tournaments
 
-`src/data/tournaments.json` contains a `tournaments` array. The first entry is the featured 2027 SOIL Invitational. The section is between About and Team; navigation, mobile menu, footer quick links, and scroll spy use `#tournaments`. The neighboring Team section uses a white background so the sequence stays white → tinted Tournaments → white Team → navy Join. Other sections retain their existing layout.
+`src/data/tournaments.json` contains a `tournaments` array. The first entry is the featured 2027 SOIL Satellite Invitational. It appears on the Tournaments page (`/soil-website/tournaments/`) and in the Home highlight card. Tournaments sits between Community and Join in navigation, the mobile menu, and footer quick links. The invitational details page marks Tournaments as the current page and links back to it.
 
 | Field | What to supply / empty behavior |
 | --- | --- |
 | `id` | Stable unique identifier. Keep `2027-soil-invitational` for the supplied entry. |
 | `name` | Tournament name; empty displays “To be announced.” |
 | `featured` | `true` renders a full-width card; `false` renders a smaller card below featured entries. Do not add placeholder tournaments. |
-| `description` | Body copy. Null/empty uses the approved default description for the 2027 SOIL Invitational; other tournaments show “To be announced.” |
+| `description` | Body copy. Null/empty uses the approved default description for the 2027 SOIL Satellite Invitational; other tournaments show “To be announced.” |
 | `date` | ISO `YYYY-MM-DD`, or ISO datetime with explicit offset, e.g. `YYYY-MM-DDTHH:mm:ss-06:00`. Null, blank, or invalid dates display “To be announced.” Valid dates use `<time>`; the displayed day retains the supplied local calendar date. |
 | `divisions` | Text or array of division names, joined by commas. Empty displays “To be announced.” |
 | `teamCap` | Confirmed number or descriptive text; empty displays “To be announced.” Zero is preserved. |
 | `fee` | Confirmed display text including currency and basis; e.g. a fee per team. Empty displays “To be announced.” No payment collection is implemented. |
 | `registration.url` | External HTTPS registration link. Empty or invalid means a genuinely disabled button with `aria-disabled`, labeled “Registration opens soon.” |
 | `volunteerUrl` | External HTTPS link. Empty/invalid hides the Volunteer section and sub-nav entry on the details page. |
-| `contactEmail` | Confirmed email for a mailto link; empty links to the home Contact section. |
+| `contactEmail` | Confirmed email for a mailto link; empty links to the Contact page. |
 | `events` | Array of event-name strings only. Empty shows “Event list to be announced.” Do not paste rules or tests. |
 | `schedule` | Array of `{ "time": "HH:mm", "title": "Activity name" }`, in day-of order and local venue time. Empty shows “Schedule to be announced.” Missing/invalid time or empty title shows “To be announced.” Valid times use `<time>`. |
 
@@ -66,9 +72,9 @@ Discord and Instagram glyphs come from Simple Icons (CC0), with the license save
 
 ## Navigation and accessibility
 
-Sticky links use native hashes (`#home`, `#about`, `#tournaments`, `#team`, `#join`, `#contact`) and `scroll-margin-top`. Scroll spy updates `aria-current="location"`; manual scrolling does not clutter browser history. The mobile menu closes after a navigation link or Escape; Escape returns focus to its button. Desktop resizing clears mobile state.
+The sticky header links to each page (`/soil-website/`, `/soil-website/about/`, `/soil-website/community/`, `/soil-website/tournaments/`, `/soil-website/join/`, `/soil-website/contact/`) and marks the current one with `aria-current="page"`. Only the invitational page keeps an in-page sub-navigation, whose scroll spy updates `aria-current="location"`. The mobile menu closes after a navigation link or Escape; Escape returns focus to its button. Desktop resizing clears mobile state.
 
-Each page has one H1, a logical heading order, named sections, image alt text, visible keyboard focus, a skip link, and a back-to-top link. Reveal transitions apply only to initially off-screen content. Reduced motion disables smooth scrolling and reveals, including preference changes during a visit. Without JavaScript all content remains visible. No analytics, cookies, backend, or submission storage are implemented.
+Each page has one H1, a logical heading order, named sections, image alt text, visible keyboard focus, a skip link, and a back-to-top link. Content appears immediately with no scroll-triggered reveal animations. Reduced motion disables smooth scrolling and other transitions. Without JavaScript all content remains visible. No analytics, cookies, backend, or submission storage are implemented.
 
 ## GitHub Pages
 
