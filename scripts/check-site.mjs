@@ -42,11 +42,21 @@ for(const link of data.links)assert(pages.about.includes(`href="${link.url}"`),`
 assert(!/about-columns|activity-grid/.test(pages.about),'About shows only mission, Science Olympiad summary, resource links, and team');
 assert(pages.about.indexOf('class="resource-row')<pages.about.indexOf('id="team"')&&pages.about.includes('class="team-grid'),'Team follows About resource links');
 assert(!all.includes('/soil-website/team/')&&!existsSync('dist/team'),'No standalone Team page');
+const officerGrid=pages.about.match(/<div class="team-grid officer-grid">[\s\S]*?<\/div><p class="todo">/)[0];
+const officerCards=[...officerGrid.matchAll(/<article class="officer-card">[\s\S]*?<\/article>/g)].map(m=>m[0]);
+assert.equal(officerCards.length,data.officers.length,'One card per officer');
+const esc=(s)=>s.replaceAll('&','&amp;');
+data.officers.forEach((officer,i)=>{
+ assert(officerCards[i].includes(`<h3>${esc(officer.name)}</h3>`)&&officerCards[i].includes(esc(officer.role)),`Officer ${officer.name} in order`);
+ if(officer.favoriteEvent)assert(officerCards[i].includes(esc(officer.favoriteEvent)),`${officer.name} favorite event`);
+ if(officer.favoriteMemory)assert(officerCards[i].includes(esc(officer.favoriteMemory)),`${officer.name} favorite memory`);
+});
 const hero=pages.home.match(/<section id="home"[\s\S]*?<\/section>/)[0];
 assert(hero.indexOf('hero-logo')<hero.indexOf('<h1')&&hero.indexOf('<h1')<hero.indexOf('hero-mission')&&hero.indexOf('hero-mission')<hero.indexOf('hero-actions'),'Hero order');
 assert.equal((hero.match(/<p\b/g)||[]).length,1,'Only mission paragraph in hero');
 assert(hero.indexOf('href="/soil-website/join/"')<hero.indexOf('href="/soil-website/about/"'),'Hero buttons link to Join and About pages');
 const joinSection=pages.join.match(/<section id="join"[\s\S]*?<\/section>/)[0];
+assert(joinSection.includes(`<p>${data.joinIntro}</p>`),'Join page description');
 let previous=-1;
 for(const link of data.joinLinks){const index=joinSection.indexOf(`href="${link.url}"`);assert(index>previous,'Join link order');previous=index}
 const tournament=pages.tournaments.match(/<section id="tournaments"[\s\S]*?<\/section>/)[0];

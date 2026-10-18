@@ -15,6 +15,10 @@
 @media(max-width:1100px){.about-grid{gap:45px}}
 @media(max-width:900px){.about-grid{grid-template-columns:1fr;gap:35px}}
 .about-team{margin-top:70px}.about-team .section-heading h2{font-size:clamp(28px,2.8vw,36px)}
+.join-heading>p{max-width:62ch;line-height:1.75}
+.officer-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}.officer-grid .officer-card{display:flex;flex-direction:column;max-width:none}.officer-grid .officer-photo,.officer-grid .photo-placeholder{aspect-ratio:4/3}.officer-grid .photo-placeholder>span{font-size:44px;font-weight:600;letter-spacing:.04em}.officer-grid .officer-text{padding:20px 20px 22px}.officer-grid .officer-text h3{font-size:20px;margin-bottom:6px}.officer-grid .officer-role{font-size:14px;font-weight:600;color:var(--dark-orange);line-height:1.5}.officer-facts{margin:16px 0 0;padding-top:14px;border-top:1px solid var(--line);display:grid;gap:12px}.officer-facts dt{font-size:12px;font-weight:700;color:var(--navy);line-height:1.4}.officer-facts dd{margin:3px 0 0;font-size:14px;color:var(--muted);line-height:1.6;max-width:38ch}
+@media(max-width:1000px){.officer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.officer-grid{grid-template-columns:1fr}.officer-grid .officer-card{max-width:420px}}
 @media(max-width:640px){.about-title{margin-bottom:30px}.about-team{margin-top:50px}.about-grid .mission-statement{font-size:15px;line-height:1.8}}
 
 .page-title{font-size:clamp(32px,3.5vw,46px);font-weight:700;letter-spacing:-.035em}.section-heading .page-title,.contact-simple .page-title{margin:0}
