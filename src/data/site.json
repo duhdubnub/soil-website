@@ -2,9 +2,6 @@
   "name": "Science Olympiad at Illinois",
   "mission": "Join Science Olympiad at Illinois to help run regional and state competitions, write and proctor exams, and mentor local teams while building real-world STEM skills, developing volunteer skills, and connecting with a national network of alumni and Illinois educators.",
   "email": "",
-  "signupUrl": "",
-  "socials": [],
-  "meeting": "[TODO: meeting time and location]",
   "officers": [
     {
       "name": "[TODO: officer name]",
@@ -33,36 +30,25 @@
       "url": "https://www.soinc.org/"
     },
     {
-      "label": "State Science Olympiad organization",
+      "label": "Illinois Science Olympiad",
       "url": "https://illinoisolympiad.org/"
     }
   ],
   "activities": [
     {
       "title": "Run Competitions",
-      "tag": "MAKE IT HAPPEN",
-      "icon": "01",
-      "description": "Help run regional and state competitions. Be part of the team that makes a great competition day possible.",
-      "detail": "Support tournament organizers with event preparation, logistics, and on-the-day volunteering. Specific assignments and opportunities will be shared once confirmed."
+      "description": "Help run regional and state competitions. Be part of the team that makes a great competition day possible."
     },
     {
       "title": "Write & Proctor Exams",
-      "tag": "SHARE WHAT YOU KNOW",
-      "icon": "02",
-      "description": "Turn your curiosity into thoughtful questions. Help write exams and support a fair testing experience.",
-      "detail": "Practice clear scientific communication through question development, review, and proctoring. Follow organizer guidance and keep unpublished competition materials confidential."
+      "description": "Turn your curiosity into thoughtful questions. Help write exams and support a fair testing experience."
     },
     {
       "title": "Mentor Local Teams",
-      "tag": "PASS IT FORWARD",
-      "icon": "03",
-      "description": "Help students explore STEM, work through challenges, and build confidence in their own ideas.",
-      "detail": "Support local teams and outreach with explanations, practice, and encouragement. Mentoring arrangements must be coordinated with coaches and approved by the club."
+      "description": "Help students explore STEM, work through challenges, and build confidence in their own ideas."
     },
     {
       "title": "Skills You’ll Build",
-      "tag": "GROW THROUGH SERVICE",
-      "icon": "04",
       "description": "Put STEM knowledge into practice while developing volunteer skills, scientific communication, teamwork, and leadership."
     }
   ],
@@ -72,14 +58,33 @@
     "story": "A shared interest in Science Olympiad connects our community. Our verified founding story and milestones will be added here.",
     "historyTodo": "[TODO: founding history and verified milestones]"
   },
-  "network": {
-    "alumni": "Stay connected to Science Olympiad by sharing your perspective, exploring volunteer opportunities, and supporting the next generation of students.",
-    "educators": "Illinois educators and local team coaches can connect with SOIL about possible mentoring and competition support. Arrangements are coordinated with coaches and confirmed individually.",
-    "todo": "[TODO: confirmed alumni and educator connection process]"
-  },
-  "join": {
-    "volunteering": "Help with regional and state competition support, exam writing and proctoring, or mentoring local teams. Specific opportunities depend on organizer needs and confirmed arrangements.",
-    "intro": "You might love explaining biology, solving an engineering problem, or making a competition run smoothly. Explore how your interests can contribute.",
-    "todo": "[TODO: confirm joining requirements, volunteer onboarding, and any eligibility restrictions]"
-  }
+  "joinLinks": [
+    {
+      "id": "oneillinois",
+      "icon": "user-plus",
+      "title": "Sign up on OneIllinois",
+      "description": "Become a member through the club’s OneIllinois page.",
+      "button": "Sign up on OneIllinois",
+      "url": "https://one.illinois.edu/ScienceOlympiadatIllinois/club_signup",
+      "primary": true
+    },
+    {
+      "id": "discord",
+      "icon": "discord",
+      "title": "Join our Discord",
+      "description": "Connect with the club on Discord.",
+      "button": "Join our Discord",
+      "url": "https://discord.gg/D2U7W4Fqj8",
+      "primary": false
+    },
+    {
+      "id": "instagram",
+      "icon": "instagram",
+      "title": "Follow us on Instagram",
+      "description": "Follow @scioly_at_illinois for club updates.",
+      "button": "Follow on Instagram",
+      "url": "https://www.instagram.com/scioly_at_illinois/",
+      "primary": false
+    }
+  ]
 }

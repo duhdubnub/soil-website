@@ -1,105 +1,82 @@
 # soil-website
 
-Science Olympiad at Illinois (SOIL): a responsive, single-page Astro + Tailwind website. The original repository title is retained above.
+Science Olympiad at Illinois (SOIL): a single-page Astro + Tailwind website. The original repository title is preserved above.
 
-## Local setup
+## Local setup and checks
 
-Install Node.js 24 LTS, matching the GitHub Actions workflow.
+Use Node.js 24 LTS, matching GitHub Actions.
 
 ```sh
 npm ci
-npm run dev
-```
-
-Open the exact URL printed by Astro, normally http://127.0.0.1:4321/soil-website/ . If that port is occupied, Astro selects another port. To request port 4322, use `npm run dev -- --port 4322`.
-
-```sh
+npm run dev -- --port 4322
 npm run build
 npm test
-npm run preview
 ```
 
-The build emits **one** HTML page. There are no Events, standalone About/What We Do, or Legal & Credits routes. The six sections appear in order: `#home`, `#about`, `#team`, `#network`, `#join`, `#contact`.
+Open http://127.0.0.1:4322/soil-website/ (or the exact port printed by Astro if occupied). `npm run preview` serves the production build. Output is one HTML page with five sections in order: Home, About, Team, Join, Contact. No Events, Network, or Legal & Credits routes exist.
 
-## Edit content
+`npm test` checks one page, section order, anchor targets and asset paths, unique IDs, naming, mission text twice, metadata, notices, hero content order, no floating labels/forms, and the three Join destinations with accessible names and safe new-tab attributes. Browser interaction and Lighthouse audits are separate; 90+ is a target, not an asserted measured score.
 
-All recurring editable content lives in `src/data/site.json`:
+## Edit content and links
 
-- `mission`: exact approved text, displayed in both Hero and About.
-- `about`: introductory Science Olympiad explanation, independent RSO identity, story, and founding-history TODO.
-- `activities`: the four About cards, with `title`, `tag`, `icon` (display number), and `description`. Keep descriptions accurate; SOIL supports/helps run competitions.
-- `officers`: array of `{ "name": "...", "role": "...", "photo": "/officers/name.webp", "email": "" }`. Put approved images in `public/officers/`. Local paths begin with `/` and automatically receive the deployment base path. Optional photo and email may remain empty. Obtain consent before publication.
-- `meeting`: confirmed meeting time and location, displayed under Join.
-- `signupUrl`: approved external HTTPS form URL. Empty means a clearly labeled pending notice, not a broken button.
-- `email`: approved public club email. Empty means a pending notice.
-- `socials`: array of `{ "label": "...", "url": "https://..." }`, shared by Contact and footer. Empty means a pending notice.
-- `links`: official national and state Science Olympiad resources, displayed under Network.
-- `network`: alumni and educator copy, plus connection-process TODO.
-- `join`: volunteer overview, interest-based introduction, and onboarding TODO.
-- `stats`: retained for future verified impact figures; not rendered. An impact strip is optional and currently omitted. Do not publish unsupported numbers.
+Edit `src/data/site.json`. All external link destinations used on the page are centralized here:
 
-Each section has a component in `src/components/sections/`; `src/pages/index.astro` assembles them. `src/layouts/Layout.astro` owns metadata, navigation, the footer, and scrolling behavior. Styling is in `src/styles/global.css`. There are no other page files or tab interfaces.
+- `joinLinks`: the three cards and footer icon links, in order. Fields: `id`, `icon` (local SVG filename without extension), `title`, `description`, `button`, `url`, and `primary`. The supplied OneIllinois link is primary, followed by Discord and Instagram. Keep the Instagram handle exact. All three destinations open in a new tab with `noopener noreferrer` and descriptive accessible names.
+- `links`: National Science Olympiad and Illinois Science Olympiad resource labels and URLs, shared by About and footer.
+- `email`: public club email. Leave empty until confirmed; the site displays `[TODO: public club email]`. A nonempty value creates a real `mailto:` link. Do not invent an email or create an invalid placeholder mailto link.
+- `officers`: `{ "name": "...", "role": "...", "photo": "/officers/name.webp", "email": "" }`. Put approved images under `public/officers/`; local paths receive the deployment base automatically. Photo and email are optional. Obtain consent before publication.
+- `mission`: approved mission, rendered verbatim in Hero and About.
+- `about`: Science Olympiad explanation, independent RSO identity, story, and history TODO.
+- `activities`: four card titles and descriptions. No labels, numbering, tags, or slogans are displayed.
+- `stats`: retained for future verified figures but not rendered. An impact strip is optional; do not publish unsupported totals.
 
-## Logo, colors, and design
+Section components live in `src/components/sections/`, assembled by `src/pages/index.astro`. Navigation, metadata, footer, and scroll behavior are in `src/layouts/Layout.astro`; styles are in `src/styles/global.css`.
 
-`public/logo.png` is the original supplied club logo. `public/logo.webp` is a 640px optimized derivative for the hero; `public/favicon.png` is a 64px derivative used in the favicon, navbar, and footer. When replacing the source logo, regenerate both derivatives without changing proportions and confirm usage rights.
+## Design and assets
 
-Colors sampled from the supplied logo are navy `#022954` and orange `#FD5612`. The CSS theme and variables define both. Orange is decorative; accessible orange-toned text uses `#AE3707`. Navy and white form the primary button contrast. Typography uses the visitor's system sans-serif fonts with bolder headings; no font files are downloaded.
+The hero order is logo, club name, mission, and two buttons. Background orbit art contains no text. There are no eyebrows, kickers, badges, chips, overlines, taglines, or decorative labels. White/off-white, light tint, and navy establish section rhythm. OneIllinois has a warm accent and stronger border. No meeting times, dues, deadlines, or extra volunteer arrangements are stated. No forms are implemented.
 
-The original orbital hero and clear section hierarchy take inspiration from Georgia Tech, while the composition and assets remain SOIL's own. White/off-white, light tint, and navy alternate through the six sections. No external reference photos, logos, code, or layouts are copied. The logo remains the visual focal point.
+`public/logo.png` is the supplied source logo. Regenerate `public/logo.webp` (640px hero derivative) and `public/favicon.png` (64px navbar/footer/favicon derivative) when replacing it. Preserve proportions and confirm image rights. Colors sampled from the logo are navy `#022954` and orange `#FD5612`; accessible orange-toned text uses `#AE3707`. Change the CSS theme/variables together when swapping colors and recheck contrast. The system sans-serif stack avoids font downloads.
+
+Discord and Instagram glyphs come from Simple Icons (CC0), with the license saved under `public/icons/`. OneIllinois uses an original generic user-plus SVG, never a university mark. See `CREDITS.md` for sources and rights. No stock photos or reference-site text, code, graphics, or layouts are copied.
 
 ## Navigation and accessibility
 
-- Sticky anchor navigation: Home, About, Team, Network, Join, Contact.
-- Native anchor links update the URL hash, work without JavaScript, and use `scroll-margin-top` to clear the header.
-- Scroll spy sets `aria-current="location"` as the active section changes without adding history entries on manual scroll.
-- The mobile menu closes after selecting a link or pressing Escape; Escape returns focus to its toggle. Moving to a desktop viewport clears mobile state.
-- One H1, named section landmarks, image alt text, visible keyboard focus, skip-to-content link, and a persistent back-to-top link.
-- Subtle off-screen reveal transitions; initial content remains visible. Reduced motion disables smooth scrolling and reveals, including when the preference changes during a visit. All content remains visible without JavaScript.
-- No analytics, cookies, backend, or contact submission storage.
+Sticky links use native hashes (`#home`, `#about`, `#team`, `#join`, `#contact`) and `scroll-margin-top`. Scroll spy updates `aria-current="location"`; manual scrolling does not clutter browser history. The mobile menu closes after a navigation link or Escape; Escape returns focus to its button. Desktop resizing clears mobile state.
 
-`npm test` validates exactly one output page, six sections in the required order, working anchor targets and asset paths, duplicate IDs, mission text twice, naming restrictions, notices, metadata, and navigation markup. Browser interaction checks and Lighthouse are separate from these structural checks. Target Lighthouse scores are 90+; do not treat that target as a measured result.
+There is one H1, a logical heading order, named sections, image alt text, visible keyboard focus, a skip link, and a back-to-top link. Reveal transitions apply only to initially off-screen content. Reduced motion disables smooth scrolling and reveals, including preference changes during a visit. Without JavaScript all content remains visible. No analytics, cookies, backend, or submission storage are implemented.
 
-## GitHub Pages deployment
+## GitHub Pages
 
-The default branch is `main`. `.github/workflows/deploy.yml` runs `npm ci`, `npm run build`, and `npm test`, then uploads `dist` and deploys to Pages. In repository **Settings → Pages → Build and deployment**, select **GitHub Actions**. Actions and the `github-pages` environment must be allowed. After enabling Pages, rerun a failed workflow or push a new commit.
+The workflow in `.github/workflows/deploy.yml` installs with `npm ci`, builds, tests, and deploys `dist` on pushes to `main` or manual dispatch. In **Settings → Pages → Build and deployment**, choose **GitHub Actions**. Enable Actions and allow the `github-pages` environment. After enabling Pages, rerun a failed workflow or push a commit.
 
-Target URL: https://duhdubnub.github.io/soil-website/
+Target: https://duhdubnub.github.io/soil-website/
 
-`astro.config.mjs` sets `site: 'https://duhdubnub.github.io'`, `base: '/soil-website'`, and trailing slashes. Navigation uses local hashes; static assets and metadata use the configured base.
+Astro configuration uses `site: 'https://duhdubnub.github.io'`, `base: '/soil-website'`, and trailing slashes. For a custom domain:
 
-### Switch to a custom domain
+1. Configure the domain and DNS through GitHub Pages settings; enable HTTPS when available.
+2. Set Astro `site` to the custom origin and `base` to `/`.
+3. Add `public/CNAME` with just the domain if required by your Pages setup.
+4. Update the asset-base expectation in `scripts/check-site.mjs` and README URLs.
+5. Rebuild and verify the five hashes, images, canonical/OG URLs, and HTTPS deployment.
 
-1. Set the domain in repository Settings → Pages and configure the DNS records GitHub specifies. Enable HTTPS once available.
-2. Change Astro `site` to the custom-domain origin and `base` to `/`.
-3. Add `public/CNAME` containing only the domain if required by the Pages setup.
-4. Update the asset-base expectation in `scripts/check-site.mjs` and the URLs in this README.
-5. Rebuild and check assets, all six hashes, canonical and Open Graph URLs, and the deployed HTTPS site.
+## Full TODO list and open legal items
 
-## Full TODO and open legal items
-
-No names, dates, emails, impact totals, awards, or testimonials have been invented.
-
-- [ ] Confirm ownership and usage rights for the supplied club logo.
+- [ ] Confirm ownership and usage rights for the supplied SOIL logo.
 - [ ] Supply verified founding history and milestones (`about.historyTodo`).
-- [ ] Replace officer name and role placeholders and complete the roster (`officers`).
-- [ ] Obtain consent for photos and replace the labeled officer-photo placeholder; confirm permission before publishing optional officer emails (Team).
-- [ ] Confirm the alumni and educator connection process (`network.todo`).
-- [ ] Supply an approved external sign-up form (`signupUrl`, Join).
-- [ ] Confirm meeting time and location (`meeting`, Join).
-- [ ] Confirm joining requirements, volunteer onboarding, and any eligibility restrictions (`join.todo`).
-- [ ] Supply the public club email (`email`, Contact).
-- [ ] Supply verified social links (`socials`, Contact and footer).
-- [ ] Confirm current Science Olympiad membership and logo permission before filling the reserved footer slot. Use an approved, unaltered, undistorted official asset with required clear space alongside the SOIL logo.
+- [ ] Replace officer-name and officer-role placeholders and complete the roster.
+- [ ] Obtain consent for officer photos; replace the labeled photo placeholder and confirm permission for optional published emails.
+- [ ] Supply a confirmed public club email (`email`, Contact).
+- [ ] Confirm Science Olympiad membership and logo permission before filling the reserved footer slot. Obtain the approved asset from soinc.org; keep it unaltered and undistorted, with clear space, alongside the SOIL logo.
 - [ ] Confirm the exact Science Olympiad trademark notice wording (footer).
-- [ ] Confirm sanctioned hosting or chapter status before making such claims. Current wording only says supports/helps run competitions.
-- [ ] Record every future third-party asset and its license in `CREDITS.md`; no legal or credits page is published.
-- [ ] Verify impact figures before adding an optional stats strip; the retained stats data is not displayed.
+- [ ] Confirm sanctioned hosting or chapter status before making such claims. Current copy only describes helping run/supporting competitions.
+- [ ] Record any future third-party asset and license in `CREDITS.md`; no credits or legal page is published.
+- [ ] Verify impact totals before adding any optional stats display.
 - [ ] Enable Pages with GitHub Actions and verify deployment.
-- [ ] Complete a production Lighthouse audit and keyboard/mobile review before claiming the 90+ target or full accessibility conformance.
+- [ ] Complete production Lighthouse and keyboard/mobile review before claiming measured 90+ scores or full accessibility conformance.
 
-Search all content placeholders with `rg TODO src README.md CREDITS.md`.
+The three supplied Join URLs are implemented, not placeholders. No meeting, fee, deadline, or form TODO appears on the site. Find remaining placeholders with `rg TODO src README.md CREDITS.md`.
 
-## Legal and credits
+## Legal
 
-See `LICENSE` (MIT for code only) and `CREDITS.md`. The code license excludes logos, photographs, and trademarks. No official university or national Science Olympiad logos are currently displayed. Required independence and trademark notices remain in the footer. Official resources are linked instead of reproducing rules manuals, event rules, or tests.
+`LICENSE` covers source code under MIT and excludes logos, photos, and trademarks. Required independence and Science Olympiad trademark notices remain in the footer. No official university or national Science Olympiad logo is displayed. Rules manuals, event rules, and tests are not reproduced; the site links to official resources.
