@@ -21,6 +21,10 @@ for(const [id,html] of Object.entries(pages)){
  assert(!/(?<!Science )\bOlympiad\b/.test(html.replace(/<[^>]*>/g,'')),'Science Olympiad written in full');
  assert(html.includes('does not speak on behalf of the university.'),'RSO notice');
  assert(html.includes('Science Olympiad at Illinois is an official alumni chapter registered with Science Olympiad, Inc. Science Olympiad and the Science Olympiad logo are trademarks of Science Olympiad, Inc.'),'Chapter and trademark notice');
+ const address=html.match(/<address class="footer-address">[\s\S]*?<\/address>/)?.[0]??'';
+ for(const line of data.address)assert(address.includes(line),`Footer address line ${line}`);
+ assert(data.email?address.includes(`href="mailto:${data.email}"`):address.includes('[TODO: public club email]'),'Footer email or placeholder');
+ assert(!html.includes('confirm exact trademark notice wording'),'Trademark TODO removed');
  assert(html.includes('Skip to content')&&html.includes('aria-controls="navigation"'),'Navigation accessibility');
  assert(html.includes('property="og:image"')&&html.includes('name="description"'),'Metadata');
  for(const img of html.matchAll(/<img\b[^>]*>/g))assert(/\balt=/.test(img[0]),'Image alt attribute');
@@ -78,6 +82,15 @@ assert.equal(cards.length,2,'Two highlight cards');
 assert(cards[0].includes('Community Impact')&&cards[0].includes('href="/soil-website/community/"'),'Community Impact card links to Community page');
 assert(cards[0].includes(data.communityImpact.replaceAll("'",'&#39;'))&&!cards[0].includes('TODO'),'Community Impact card text');
 assert(cards[1].includes(featured.name)&&cards[1].includes('href="/soil-website/tournaments/"')&&cards[1].includes('Info + Register'),'Tournament card links to Tournaments page');
+// Community page: one card per communityCards entry, side by side, with the email (or its placeholder) on contact cards.
+const communityCards=[...pages.community.matchAll(/<article class="highlight-card">[\s\S]*?<\/article>/g)].map(m=>m[0]);
+assert.equal(communityCards.length,data.communityCards.length,'Community cards');
+data.communityCards.forEach((card,i)=>{
+ assert(communityCards[i].includes(`<h2>${card.title.replaceAll('&','&amp;')}</h2>`)&&communityCards[i].includes(card.description.replaceAll("'",'&#39;')),`Community card ${card.title}`);
+ if(card.contactEmail)assert(data.email?communityCards[i].includes(`href="mailto:${data.email}"`):communityCards[i].includes('[TODO: public club email]'),'Community card email or placeholder');
+});
+assert(!pages.community.includes('[TODO: outreach programs'),'Community outreach placeholder replaced');
+assert(pages.community.includes(`<p>${data.communityIntro.replaceAll("'",'&#39;')}</p>`)&&!pages.community.includes('[TODO: short community impact introduction]'),'Community intro');
 console.log('Passed: six pages, page navigation, home highlights, tournament pending states, hero, join links and compliance copy.');
 
 const detail=readFileSync('dist/invitational/index.html','utf8');

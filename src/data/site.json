@@ -3,7 +3,26 @@
   "mission": "Join Science Olympiad at Illinois to help run regional and state competitions, write and proctor exams, and mentor local teams while building real-world STEM skills, developing volunteer skills, and connecting with a national network of alumni and Illinois educators.",
   "missionStatement": "Science Olympiad at Illinois (SOIL) is a student-run organization with the purpose of supporting the Science Olympiad experience for high school students in Urbana-Champaign and the state of Illinois. We strive to include Science Olympiad alumni and students who are interested in supporting Science Olympiad, regardless of personal identity or views. To maintain a strong connection with the Science Olympiad community, our goals are to host a Science Olympiad invitational competition and to provide outreach to current Science Olympiad Division B teams, Division C teams, and with Illinois Science Olympiad (ISO). SOIL also serves to allow University of Illinois students interested in Science Olympiad to engage with the organization at a higher level. Students will have opportunities to help organize competitions at the regional and State level, write and proctor exams, and work with local teams through mentoring.",
   "communityImpact": "We're committed to expanding access to STEM throughout Champaign-Urbana and Central Illinois. Our members hope to volunteer as mentors for local middle and high school teams. We also partner with Illinois Science Olympiad to help run regional and state tournaments by writing and supervising events, grading, and handling logistics.",
+  "communityIntro": "Science Olympiad at Illinois brings University of Illinois students together to give back to the Science Olympiad community. We're working to expand access to STEM across Champaign-Urbana and Central Illinois by volunteering at local invitationals, helping Illinois Science Olympiad run regional and state tournaments, and reaching out to local Division B and C teams through mentorship.",
+  "communityCards": [
+    {
+      "title": "Volunteering at Invitationals, Regionals & State",
+      "description": "We're eager to volunteer at local invitationals and regional tournaments, helping supervise events, grade, and keep competition day running smoothly. We're also in talks about helping with the Illinois state tournament."
+    },
+    {
+      "title": "Mentorship for Local Schools",
+      "description": "We're interested in and open to mentoring Science Olympiad programs at local schools. Coaches and students looking for support can reach out with inquiries at",
+      "contactEmail": true
+    }
+  ],
   "joinIntro": "Interested in helping out with the Science Olympiad mission on campus? Join the OneIllinois group and the Discord to learn more about our mission and to learn more about how to list club announcements about our events.",
+  "address": [
+    "Science Olympiad at Illinois",
+    "c/o Student Engagement",
+    "284 Illini Union",
+    "1401 W. Green St., MC-384",
+    "Urbana, IL 61801"
+  ],
   "email": "",
   "officers": [
     {

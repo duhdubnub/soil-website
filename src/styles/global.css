@@ -14,8 +14,11 @@
 .about-title{margin-bottom:45px}.about-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:70px;align-items:start}.about-grid h2{font-size:21px;margin-bottom:.65em}.about-grid p{color:var(--muted);font-size:15px;margin-bottom:0}.about-grid .mission-statement{font-size:16px;line-height:1.85}
 @media(max-width:1100px){.about-grid{gap:45px}}
 @media(max-width:900px){.about-grid{grid-template-columns:1fr;gap:35px}}
-.about-team{margin-top:70px}.about-team .section-heading h2{font-size:clamp(28px,2.8vw,36px)}
+.about-team{margin-top:70px}.about-team:focus{outline:none}.about-team .section-heading h2{font-size:clamp(28px,2.8vw,36px)}
 .join-heading>p{max-width:62ch;line-height:1.75}
+.community-heading{margin-bottom:40px}.community-heading>p{max-width:62ch;font-size:16px;line-height:1.75;color:var(--muted);margin:0}
+.footer-legal-grid{display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:50px;align-items:start}.footer-address{display:flex;flex-direction:column;font-style:normal;font-size:12px;line-height:1.7;color:var(--muted)}.footer-address strong{color:var(--navy);font-weight:700}.footer-address a,.footer-address .todo{margin-top:8px}.footer-notices p{max-width:75ch}.footer-notices p:last-child{margin-bottom:0}
+@media(max-width:640px){.footer-legal-grid{grid-template-columns:1fr;gap:22px}}
 .officer-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}.officer-grid .officer-card{display:flex;flex-direction:column;max-width:none}.officer-grid .officer-photo,.officer-grid .photo-placeholder{aspect-ratio:4/3}.officer-grid .photo-placeholder>span{font-size:44px;font-weight:600;letter-spacing:.04em}.officer-grid .officer-text{padding:20px 20px 22px}.officer-grid .officer-text h3{font-size:20px;margin-bottom:6px}.officer-grid .officer-role{font-size:14px;font-weight:600;color:var(--dark-orange);line-height:1.5}.officer-facts{margin:16px 0 0;padding-top:14px;border-top:1px solid var(--line);display:grid;gap:12px}.officer-facts dt{font-size:12px;font-weight:700;color:var(--navy);line-height:1.4}.officer-facts dd{margin:3px 0 0;font-size:14px;color:var(--muted);line-height:1.6;max-width:38ch}
 @media(max-width:1000px){.officer-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:560px){.officer-grid{grid-template-columns:1fr}.officer-grid .officer-card{max-width:420px}}
@@ -23,5 +26,5 @@
 
 .page-title{font-size:clamp(32px,3.5vw,46px);font-weight:700;letter-spacing:-.035em}.section-heading .page-title,.contact-simple .page-title{margin:0}
 
-.highlight-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}.highlight-card{display:flex;flex-direction:column;align-items:center;text-align:center;background:linear-gradient(90deg,var(--navy),var(--orange)) top/100% 4px no-repeat,white;border:1px solid var(--line);border-radius:8px;padding:38px 32px 40px;box-shadow:0 10px 30px #0229540d}.highlight-card h2{font-size:22px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px}.highlight-card p{color:var(--muted);font-size:15px;max-width:56ch;margin-bottom:28px}.highlight-card .button{margin-top:auto}
+.highlight-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}.highlight-card{display:flex;flex-direction:column;align-items:center;text-align:center;background:linear-gradient(90deg,var(--navy),var(--orange)) top/100% 4px no-repeat,white;border:1px solid var(--line);border-radius:8px;padding:38px 32px 40px;box-shadow:0 10px 30px #0229540d}.highlight-card h2{font-size:22px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px}.highlight-card p{color:var(--muted);font-size:15px;max-width:56ch;margin-bottom:28px}.highlight-card .button{margin-top:auto}.highlight-card p:last-child{margin-bottom:0}
 @media(max-width:760px){.highlight-grid{grid-template-columns:1fr;gap:22px}.highlight-card{padding:32px 24px 34px}.highlight-card h2{font-size:19px}}
