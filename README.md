@@ -74,6 +74,8 @@ Each page has one H1, a logical heading order, named sections, image alt text, v
 
 The workflow in `.github/workflows/deploy.yml` installs with `npm ci`, builds, tests, and deploys `dist` on pushes to `main` or manual dispatch. In **Settings → Pages → Build and deployment**, choose **GitHub Actions**. Enable Actions and allow the `github-pages` environment. After enabling Pages, rerun a failed workflow or push a commit.
 
+`.github/workflows/pr-check.yml` runs the same `npm ci`, build, and test steps on every pull request into `main`, without deploying. Merge only when its check passes.
+
 Target: https://duhdubnub.github.io/soil-website/
 
 Astro configuration uses `site: 'https://duhdubnub.github.io'`, `base: '/soil-website'`, and trailing slashes. For a custom domain:
