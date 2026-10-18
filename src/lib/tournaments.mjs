@@ -1,7 +1,7 @@
 export const fallback = 'To be announced';
 export const hasValue = value => value !== null && value !== undefined && String(value).trim() !== '';
 export const display = value => Array.isArray(value) ? (value.filter(hasValue).join(', ') || fallback) : hasValue(value) ? String(value) : fallback;
-export const description = tournament => hasValue(tournament.description) ? tournament.description : tournament.id === '2027-soil-invitational' ? 'The 2027 SOIL Invitational is a Science Olympiad invitational tournament hosted by Science Olympiad at Illinois and run by our members and volunteers. Invitationals give teams competition practice ahead of regional and state tournaments.' : fallback;
+export const description = tournament => hasValue(tournament.description) ? tournament.description : tournament.id === '2027-soil-invitational' ? 'The 2027 SOIL Satellite Invitational is a Science Olympiad invitational tournament hosted by Science Olympiad at Illinois and run by our members and volunteers. Invitationals give teams competition practice ahead of regional and state tournaments.' : fallback;
 export function dateValue(value) {
   if (!hasValue(value) || !/^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}(?::\d{2})?(?:Z|[+-]\d{2}:\d{2}))?$/.test(value)) return null;
   const day=value.slice(0,10), parsed=new Date(`${day}T12:00:00Z`);

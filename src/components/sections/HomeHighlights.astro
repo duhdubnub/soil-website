@@ -1,0 +1,7 @@
+---
+import data from '../../data/tournaments.json';
+import {display,description} from '../../lib/tournaments.mjs';
+const base=import.meta.env.BASE_URL.replace(/\/$/,'');
+const tournament=data.tournaments.find(t=>t.featured)??data.tournaments[0];
+---
+<section id="highlights" class="section tint" aria-label="Highlights"><div class="container highlight-grid"><article class="highlight-card reveal"><h2>Community Impact</h2><p class="todo">[TODO: community impact summary]</p><a class="button" href={`${base}/community/`}>Learn More <span aria-hidden="true">→</span></a></article><article class="highlight-card reveal"><h2>{display(tournament.name)}</h2><p>{description(tournament)}</p><a class="button" href={`${base}/tournaments/`}>Info + Register <span aria-hidden="true">→</span></a></article></div></section>
