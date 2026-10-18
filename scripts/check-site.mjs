@@ -5,7 +5,7 @@ import './check-tournaments.mjs';
 const html=readFileSync('dist/index.html','utf8');
 const data=JSON.parse(readFileSync('src/data/site.json','utf8'));
 const files=(dir)=>readdirSync(dir,{withFileTypes:true}).flatMap(f=>f.isDirectory()?files(join(dir,f.name)):[join(dir,f.name)]);
-assert.equal(files('dist').filter(f=>f.endsWith('.html')).length,1,'Exactly one HTML page');
+assert.equal(files('dist').filter(f=>f.endsWith('.html')).length,2,'Home and invitational pages');
 const sections=[...html.matchAll(/<section\b[^>]*\bid="([^"]+)"/g)].map(m=>m[1]);
 assert.deepEqual(sections,['home','about','tournaments','team','join','contact'],'Required section order');
 assert.equal((html.match(/<h1\b/g)||[]).length,1,'One h1');
@@ -45,9 +45,37 @@ const tournaments=JSON.parse(readFileSync('src/data/tournaments.json','utf8')).t
 if(tournaments.length===1){
  const t=tournaments[0];
  if(!t.registration?.url)assert(tournament.includes('aria-disabled="true"')&&tournament.includes('Registration opens soon'),'Registration unavailable');
- if(!t.events?.length)assert(tournament.includes('Event list to be announced'),'Pending events');
- if(!t.schedule?.length)assert(tournament.includes('Schedule to be announced'),'Pending schedule');
+ if(!t.events?.length)assert(!tournament.includes('Event list to be announced'),'Events moved off home');
+ if(!t.schedule?.length)assert(!tournament.includes('Schedule to be announced'),'Schedule moved off home');
  if(!t.date||!t.location)assert(!tournament.includes('application/ld+json'),'No premature Event schema');
  if(!t.contactEmail)assert(tournament.includes('href="#contact"'),'Contact fallback');
 }
 console.log('Passed: single page, six ordered sections, tournament pending states, navigation, hero, join links, assets and compliance copy.');
+
+const detail=readFileSync('dist/invitational/index.html','utf8');
+assert(detail.includes('<title>2027 SOIL Invitational | Science Olympiad at Illinois</title>'));
+assert(tournament.includes('href="/soil-website/invitational/"'));
+assert(!html.includes('application/ld+json'));
+for(const page of [html,detail]){
+ assert.equal((page.match(/<h1\b/g)||[]).length,1);
+ assert(page.includes('/fonts/Geist-Variable.woff2')&&page.includes('font-display:swap'));
+ assert(page.includes('alt="Science Olympiad logo"'));
+ const pageIds=[...page.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
+ assert.equal(new Set(pageIds).size,pageIds.length);
+ for(const [,id] of page.matchAll(/href="#([^"]+)"/g))assert(pageIds.includes(id),id);
+ for(const [,path] of page.matchAll(/(?:href|src|srcset)="(\/[^"#?]*)(?:#[^"]*)?"/g)){
+  assert(path.startsWith('/soil-website/'));
+  const target=join('dist',path.slice('/soil-website/'.length));assert(existsSync(path.endsWith('/')?join(target,'index.html'):target),path);
+ }
+}
+const event=tournaments.find(t=>t.id==='2027-soil-invitational');
+for(const [id,present] of [['updates',!!event.updates?.length],['volunteer',!!event.volunteerUrl],['team',!!event.team?.length]]){
+ assert.equal(detail.includes(`id="${id}"`),present);
+ assert.equal(detail.includes(`data-event-link="${id}"`),present);
+}
+if(!event.events?.length)assert(detail.includes('Event list to be announced'));
+if(!event.schedule?.length)assert(detail.includes('Schedule to be announced'));
+if(!event.date||!event.location)assert(!detail.includes('application/ld+json'));
+assert(detail.includes('href="/soil-website/#about"'));
+assert(/href="\/soil-website\/#tournaments" aria-current="location"/.test(detail));
+console.log('Passed: invitational routing, conditional navigation, shared assets, font preload, and pending content.');

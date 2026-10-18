@@ -10,11 +10,20 @@
       "divisions": null,
       "teamCap": null,
       "fee": null,
-      "registration": { "opens": null, "closes": null, "url": null },
+      "registration": {
+        "opens": null,
+        "closes": null,
+        "url": null
+      },
       "volunteerUrl": null,
       "contactEmail": null,
       "events": [],
-      "schedule": []
+      "schedule": [],
+      "format": null,
+      "aboutParagraphs": [],
+      "platformUrl": null,
+      "updates": [],
+      "team": []
     }
   ]
 }

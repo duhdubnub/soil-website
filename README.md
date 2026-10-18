@@ -1,6 +1,6 @@
 # soil-website
 
-Science Olympiad at Illinois (SOIL): a single-page Astro + Tailwind website. The original repository title is preserved above.
+Science Olympiad at Illinois (SOIL): an Astro + Tailwind website with a scrolling home page and invitational details page. The original repository title is preserved above.
 
 ## Local setup and checks
 
@@ -13,9 +13,9 @@ npm run build
 npm test
 ```
 
-Open http://127.0.0.1:4322/soil-website/ (or the exact port printed by Astro if occupied). `npm run preview` serves the production build. Output is one HTML page with six sections in order: Home, About, Tournaments, Team, Join, Contact. No Events, Network, or Legal & Credits routes exist.
+Open http://127.0.0.1:4322/soil-website/ (or the exact port printed by Astro if occupied). `npm run preview` serves the production build. The home page has six sections in order: Home, About, Tournaments, Team, Join, Contact. The dedicated event page is at `/soil-website/invitational/`.
 
-`npm test` checks one page, section order, anchor targets and asset paths, unique IDs, naming, mission text twice, metadata, notices, hero content order, no floating labels/forms, and the three Join destinations with accessible names and safe new-tab attributes. Browser interaction and Lighthouse audits are separate; 90+ is a target, not an asserted measured score.
+`npm test` checks both pages, section order, anchor targets and asset paths, unique IDs, naming, mission text twice, metadata, notices, hero content order, no floating labels/forms, and the three Join destinations with accessible names and safe new-tab attributes. Browser interaction and Lighthouse audits are separate; 90+ is a target, not an asserted measured score.
 
 ## Edit content and links
 
@@ -49,12 +49,12 @@ Section components live in `src/components/sections/`, assembled by `src/pages/i
 | `fee` | Confirmed display text including currency and basis; e.g. a fee per team. Empty displays “To be announced.” No payment collection is implemented. |
 | `registration.opens`, `.closes` | ISO dates as above. If both are empty, Registration shows “To be announced”; otherwise opens/closes display separately, with pending text for either missing date. |
 | `registration.url` | External HTTPS registration link. Empty or invalid means a genuinely disabled button with `aria-disabled`, labeled “Registration opens soon.” |
-| `volunteerUrl` | External HTTPS link. Empty/invalid hides the Volunteer button completely. |
-| `contactEmail` | Confirmed email for a mailto link; empty links to `#contact`. |
+| `volunteerUrl` | External HTTPS link. Empty/invalid hides the Volunteer section and sub-nav entry on the details page. |
+| `contactEmail` | Confirmed email for a mailto link; empty links to the home Contact section. |
 | `events` | Array of event-name strings only. Empty shows “Event list to be announced.” Do not paste rules or tests. |
 | `schedule` | Array of `{ "time": "HH:mm", "title": "Activity name" }`, in day-of order and local venue time. Empty shows “Schedule to be announced.” Missing/invalid time or empty title shows “To be announced.” Valid times use `<time>`. |
 
-Event JSON-LD appears only when a valid date and nonempty location are supplied, and includes only known fields. Structured data is safely serialized; no fictitious offers, capacity, attendance mode, or event status is added. Run `node scripts/check-tournaments.mjs` for date/null/URL/schema checks and `npm test` for built markup checks. All tournament data is rendered statically, with no new dependencies.
+Event JSON-LD appears on the invitational page only when a valid date and nonempty location are supplied, and includes only known fields. Structured data is safely serialized; no fictitious offers, capacity, attendance mode, or event status is added. Run `node scripts/check-tournaments.mjs` for date/null/URL/schema checks and `npm test` for built markup checks. All tournament data is rendered statically, with no new dependencies.
 
 Still needed for the tournament: description overrides if desired, date, venue/address, divisions, team cap, fee, registration opening/closing dates and HTTPS URL, optional volunteer URL, tournament contact email, event names, and day-of schedule. All currently remain null/empty. Confirm national invitational hosting guidelines, a Tournament Director form if required, and state chapter director permission before finalizing the tournament.
 
@@ -62,7 +62,7 @@ Still needed for the tournament: description overrides if desired, date, venue/a
 
 The hero order is logo, club name, mission, and two buttons. Background orbit art contains no text. There are no eyebrows, kickers, badges, chips, overlines, taglines, or decorative labels. White/off-white, light tint, and navy establish section rhythm. OneIllinois has a warm accent and stronger border. No meeting times, dues, deadlines, or extra volunteer arrangements are stated. No forms are implemented.
 
-`public/logo.png` is the supplied source logo. Regenerate `public/logo.webp` (640px hero derivative) and `public/favicon.png` (64px navbar/footer/favicon derivative) when replacing it. Preserve proportions. The SOIL artwork is club-owned, all rights reserved. Colors sampled from the logo are navy `#022954` and orange `#FD5612`; accessible orange-toned text uses `#AE3707`. Change the CSS theme/variables together when swapping colors and recheck contrast. The system sans-serif stack avoids font downloads.
+`public/logo.png` is the supplied source logo. Regenerate `public/logo.webp` (640px hero derivative) and `public/favicon.png` (64px navbar/footer/favicon derivative) when replacing it. Preserve proportions. The SOIL artwork is club-owned, all rights reserved. Colors sampled from the logo are navy `#022954` and orange `#FD5612`; accessible orange-toned text uses `#AE3707`. Change the CSS theme/variables together when swapping colors and recheck contrast. All text uses self-hosted Geist Sans variable WOFF2 from official `geist@1.8.1`, preloaded with `font-display: swap` and system fallbacks. Files and OFL license: `public/fonts/`.
 
 Discord and Instagram glyphs come from Simple Icons (CC0), with the license saved under `public/icons/`. OneIllinois uses an original generic user-plus SVG, never a university mark. See `CREDITS.md` for sources and rights. No stock photos or reference-site text, code, graphics, or layouts are copied.
 
@@ -70,7 +70,7 @@ Discord and Instagram glyphs come from Simple Icons (CC0), with the license save
 
 Sticky links use native hashes (`#home`, `#about`, `#tournaments`, `#team`, `#join`, `#contact`) and `scroll-margin-top`. Scroll spy updates `aria-current="location"`; manual scrolling does not clutter browser history. The mobile menu closes after a navigation link or Escape; Escape returns focus to its button. Desktop resizing clears mobile state.
 
-There is one H1, a logical heading order, named sections, image alt text, visible keyboard focus, a skip link, and a back-to-top link. Reveal transitions apply only to initially off-screen content. Reduced motion disables smooth scrolling and reveals, including preference changes during a visit. Without JavaScript all content remains visible. No analytics, cookies, backend, or submission storage are implemented.
+Each page has one H1, a logical heading order, named sections, image alt text, visible keyboard focus, a skip link, and a back-to-top link. Reveal transitions apply only to initially off-screen content. Reduced motion disables smooth scrolling and reveals, including preference changes during a visit. Without JavaScript all content remains visible. No analytics, cookies, backend, or submission storage are implemented.
 
 ## GitHub Pages
 
@@ -88,12 +88,10 @@ Astro configuration uses `site: 'https://duhdubnub.github.io'`, `base: '/soil-we
 
 ## Full TODO list and open legal items
 
-- [ ] Confirm ownership and usage rights for the supplied SOIL logo.
 - [ ] Supply verified founding history and milestones (`about.historyTodo`).
 - [ ] Replace officer-name and officer-role placeholders and complete the roster.
 - [ ] Obtain consent for officer photos; replace the labeled photo placeholder and confirm permission for optional published emails.
 - [ ] Supply a confirmed public club email (`email`, Contact).
-- [ ] Supply the official Science Olympiad logo file before filling the reserved footer slot; keep it unaltered and undistorted, with clear space, alongside the club logo. Chapter status is confirmed by the club.
 - [ ] Confirm the exact chapter-status and trademark notice wording with Science Olympiad, Inc. (footer).
 - [ ] Confirm the Science Olympiad, Inc. guidelines for hosting invitationals, a Tournament Director form on file if required, and state chapter director permission. Do not imply sanctioned status or endorsement.
 - [ ] Record any future third-party asset and license in `CREDITS.md`; no credits or legal page is published.
@@ -105,4 +103,20 @@ The three supplied Join URLs are implemented, not placeholders. Unknown tourname
 
 ## Legal
 
-`LICENSE` covers source code under MIT and excludes logos, photos, and trademarks. Required independence and Science Olympiad trademark notices remain in the footer. No official university or national Science Olympiad logo is displayed. Rules manuals, event rules, and tests are not reproduced; the site links to official resources.
+`LICENSE` covers source code under MIT and excludes logos, photos, and trademarks. Required independence and Science Olympiad trademark notices remain in the footer. No official university logo is displayed. The official Science Olympiad mark is displayed unaltered in the footer. Rules manuals, event rules, and tests are not reproduced; the site links to official resources.
+
+## Invitational details and shared assets
+
+`src/pages/invitational.astro` uses the shared layout, with home-section navigation and Tournaments active. Its sticky secondary navigation tracks only rendered sections. Home cards link here and omit Events, Schedule, and Volunteer. Unknown data is never invented.
+
+Additional optional fields in `src/data/tournaments.json`:
+
+| Field | Behavior |
+| --- | --- |
+| `format` | Plain text; empty displays “To be announced.” |
+| `aboutParagraphs` | Array of additional approved paragraphs, following the description. |
+| `platformUrl` | External HTTPS tournament platform link; null/invalid hides it. |
+| `updates` | Array of `{ "date": "YYYY-MM-DD", "title": "...", "body": "..." }`, sorted newest first. Empty hides section/navigation. |
+| `team` | Array of `{ "name": "...", "role": "..." }`. Empty hides section/navigation. |
+
+The official black Science Olympiad PDF was downloaded successfully and converted with PyMuPDF to `public/logos/science-olympiad.svg` and `.png`. Only outer blank page margins were removed; all artwork, original colors, proportions, tagline and TM remain intact. The asset includes more than an S-height clear space, with additional white-panel padding in CSS. To replace it, use the official source, retain all artwork and recheck the brand guidelines. Source and permission links are recorded in CREDITS.md.
