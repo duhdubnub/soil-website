@@ -1,0 +1,20 @@
+{
+  "tournaments": [
+    {
+      "id": "2027-soil-invitational",
+      "name": "2027 SOIL Invitational",
+      "featured": true,
+      "description": null,
+      "date": null,
+      "location": null,
+      "divisions": null,
+      "teamCap": null,
+      "fee": null,
+      "registration": { "opens": null, "closes": null, "url": null },
+      "volunteerUrl": null,
+      "contactEmail": null,
+      "events": [],
+      "schedule": []
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+---
+import {dateValue,fallback} from '../lib/tournaments.mjs';
+const date=dateValue(Astro.props.value);
+---
+{date?<time datetime={date.iso}>{date.label}</time>:fallback}

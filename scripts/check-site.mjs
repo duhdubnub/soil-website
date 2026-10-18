@@ -1,18 +1,19 @@
 import {readFileSync,existsSync,readdirSync} from 'node:fs';
 import assert from 'node:assert/strict';
 import {join} from 'node:path';
+import './check-tournaments.mjs';
 const html=readFileSync('dist/index.html','utf8');
 const data=JSON.parse(readFileSync('src/data/site.json','utf8'));
 const files=(dir)=>readdirSync(dir,{withFileTypes:true}).flatMap(f=>f.isDirectory()?files(join(dir,f.name)):[join(dir,f.name)]);
 assert.equal(files('dist').filter(f=>f.endsWith('.html')).length,1,'Exactly one HTML page');
 const sections=[...html.matchAll(/<section\b[^>]*\bid="([^"]+)"/g)].map(m=>m[1]);
-assert.deepEqual(sections,['home','about','team','join','contact'],'Required section order');
+assert.deepEqual(sections,['home','about','tournaments','team','join','contact'],'Required section order');
 assert.equal((html.match(/<h1\b/g)||[]).length,1,'One h1');
 assert.equal(html.split(data.mission).length-1,2,'Verbatim mission in hero and About');
 assert(!/UIUC|Fighting Illini|\bSciOly\b/i.test(html),'Naming restrictions');
 assert(!/(?<!Science )\bOlympiad\b/.test(html.replace(/<[^>]*>/g,'')),'Science Olympiad written in full');
 assert(html.includes('does not speak on behalf of the university.'),'RSO notice');
-assert(html.includes('This is not an official Science Olympiad, Inc. website.'),'Trademark notice');
+assert(html.includes('Science Olympiad at Illinois is an official alumni chapter registered with Science Olympiad, Inc. Science Olympiad and the Science Olympiad logo are trademarks of Science Olympiad, Inc.'),'Chapter and trademark notice');
 assert(html.includes('Skip to content')&&html.includes('aria-controls="navigation"'),'Navigation accessibility');
 assert(html.includes('property="og:image"')&&html.includes('name="description"'),'Metadata');
 const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
@@ -37,4 +38,16 @@ for(const link of data.joinLinks){
  assert.equal(anchors.length,2,'Join and footer links');
  for(const a of anchors)assert(a.includes('target="_blank"')&&a.includes('rel="noopener noreferrer"')&&a.includes('aria-label="'),'Accessible safe external links');
 }
-console.log('Passed: one page, five ordered sections, hero order, three join links, safe new-tab attributes, no floating labels/forms, anchors/assets, mission twice and required notices.');
+const tournament=html.match(/<section id="tournaments"[\s\S]*?<\/section>/)[0];
+assert(!tournament.includes('TODO'),'No raw tournament TODOs');
+assert(tournament.includes('<dl>'),'Semantic key facts');
+const tournaments=JSON.parse(readFileSync('src/data/tournaments.json','utf8')).tournaments;
+if(tournaments.length===1){
+ const t=tournaments[0];
+ if(!t.registration?.url)assert(tournament.includes('aria-disabled="true"')&&tournament.includes('Registration opens soon'),'Registration unavailable');
+ if(!t.events?.length)assert(tournament.includes('Event list to be announced'),'Pending events');
+ if(!t.schedule?.length)assert(tournament.includes('Schedule to be announced'),'Pending schedule');
+ if(!t.date||!t.location)assert(!tournament.includes('application/ld+json'),'No premature Event schema');
+ if(!t.contactEmail)assert(tournament.includes('href="#contact"'),'Contact fallback');
+}
+console.log('Passed: single page, six ordered sections, tournament pending states, navigation, hero, join links, assets and compliance copy.');
