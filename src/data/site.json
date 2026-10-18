@@ -1,0 +1,16 @@
+{
+  "name": "Science Olympiad at Illinois",
+  "mission": "Join Science Olympiad at Illinois to help run regional and state competitions, write and proctor exams, and mentor local teams while building real-world STEM skills, developing volunteer skills, and connecting with a national network of alumni and Illinois educators.",
+  "email": "", "signupUrl": "", "socials": [],
+  "meeting": "[TODO: meeting time and location]",
+  "events": [], "pastEvents": [],
+  "officers": [{"name":"[TODO: officer name]","role":"[TODO: officer role]","photo":"","email":""}],
+  "stats": [{"label":"Competitions supported","value":"—"},{"label":"Volunteer hours","value":"—"},{"label":"Teams mentored","value":"—"}],
+  "links": [{"label":"National Science Olympiad","url":"https://www.soinc.org/"},{"label":"State Science Olympiad organization","url":"https://illinoisolympiad.org/"}],
+  "activities": [
+    {"title":"Run Competitions","tag":"MAKE IT HAPPEN","icon":"01","description":"Help run regional and state competitions. Be part of the team that makes a great competition day possible.","detail":"Support tournament organizers with event preparation, logistics, and on-the-day volunteering. Specific assignments and opportunities will be shared once confirmed."},
+    {"title":"Write & Proctor Exams","tag":"SHARE WHAT YOU KNOW","icon":"02","description":"Turn your curiosity into thoughtful questions. Help write exams and support a fair testing experience.","detail":"Practice clear scientific communication through question development, review, and proctoring. Follow organizer guidance and keep unpublished competition materials confidential."},
+    {"title":"Mentor Local Teams","tag":"PASS IT FORWARD","icon":"03","description":"Help students explore STEM, work through challenges, and build confidence in their own ideas.","detail":"Support local teams and outreach with explanations, practice, and encouragement. Mentoring arrangements must be coordinated with coaches and approved by the club."},
+    {"title":"Alumni & Educator Network","tag":"STAY CONNECTED","icon":"04","description":"Connect with people who share your love of science, from fellow alumni to Illinois educators.","detail":"Exchange perspectives with alumni, teachers, and coaches. Share your experience and discover new ways to support the next generation of Science Olympiad participants."}
+  ]
+}

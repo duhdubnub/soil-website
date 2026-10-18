@@ -1,0 +1,6 @@
+---
+import data from '../data/site.json';
+const {past=false}=Astro.props;
+const events=past?data.pastEvents:data.events;
+---
+{events.length ? <div class="event-list">{events.map(event=><article class="event-row"><div class="event-date">{event.date}</div><div><h3>{event.title}</h3><p>{event.location}</p><p>{event.description}</p></div>{event.url&&<a href={event.url}>Details ↗</a>}</article>)}</div> : <div class="empty-state"><span class="empty-symbol" aria-hidden="true">{past?'↶':'↗'}</span><div><h3>{past?'Our next chapter starts here.':'Good things are in the works.'}</h3><p>{past?'Past event highlights will appear here once verified.':'Meeting and volunteer dates will be shared here once confirmed.'}</p><p class="todo">{past?'[TODO: verified past events]':'[TODO: upcoming event dates, locations, and details]'}</p></div><span class="status">{past?'ARCHIVE PENDING':'SCHEDULE COMING SOON'}</span></div>}
