@@ -11,5 +11,5 @@
 
 Build dependencies retain their own notices in installed packages. No third-party stock photographs, web fonts, icon libraries, or official university / Science Olympiad logos are included. Future assets must be recorded here and on `/legal/` before publication. Obtain consent before publishing photos of people.
 
-The reference https://www.sciolygatech.org/ was opened for inspiration but provided no readable page text in the research browser. No text, code, assets, or layout were copied; the user's specified page structure was followed.
+Design references reviewed: https://www.sciolygatech.org/ (primary: atmospheric science identity and clear section hierarchy), https://scioly.mit.edu/ (event information prominence), https://goldengateso.com/get_involved/ (distinct involvement pathways), and https://harvardundergraduatescienceolympiad.org/ (mission and participation emphasis). The SOIL composition, orbital artwork, copy, and implementation are original. No reference-site text, code, photos, logos, or layouts were copied.
 National brand guidance: https://www.soinc.org/sites/default/files/uploaded_files/Brand_Guidelines.pdf . State resource: https://illinoisolympiad.org/ . These are links, not reproduced assets.

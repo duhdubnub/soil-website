@@ -2,6 +2,18 @@
   "name": "Science Olympiad at Illinois",
   "mission": "Join Science Olympiad at Illinois to help run regional and state competitions, write and proctor exams, and mentor local teams while building real-world STEM skills, developing volunteer skills, and connecting with a national network of alumni and Illinois educators.",
   "email": "", "signupUrl": "", "socials": [],
+  "pathways": [
+    {"audience":"FOR STUDENTS","title":"Join the community.","description":"Meet people who share your curiosity and explore ways to support Science Olympiad through SOIL.","action":"How to join","page":"get-involved"},
+    {"audience":"FOR VOLUNTEERS","title":"Put your skills to work.","description":"Explore competition support, exam writing, and proctoring. Find a contribution that fits your interests.","action":"Explore our work","page":"what-we-do"},
+    {"audience":"FOR ALUMNI & EDUCATORS","title":"Pass your experience on.","description":"Connect about mentoring local teams and helping students discover what they can do.","action":"Build a connection","page":"alumni"}
+  ],
+  "faqs": [
+    {"question":"What does SOIL do?","answer":"Science Olympiad at Illinois helps run regional and state competitions, write and proctor exams, and mentor local teams while connecting members with alumni and educators."},
+    {"question":"How can I get involved?","answer":"Start with the Get Involved page to explore joining and volunteering. The sign-up form and meeting details will be published once confirmed."},
+    {"question":"Where can I find meeting and event dates?","answer":"The Events page is the home for confirmed dates, locations, and details. The schedule is currently pending; no event dates have been announced on this website."},
+    {"question":"Can teachers, coaches, and alumni connect with SOIL?","answer":"Yes. Visit Alumni & Network to learn about possible mentoring and volunteer connections. Specific arrangements are coordinated with the club and confirmed individually."},
+    {"question":"Where should I look for official competition resources?","answer":"Use the national and state organization links on Alumni & Network for official resources. This independent student organization website does not reproduce competition rules or manuals."}
+  ],
   "meeting": "[TODO: meeting time and location]",
   "events": [], "pastEvents": [],
   "officers": [{"name":"[TODO: officer name]","role":"[TODO: officer role]","photo":"","email":""}],

@@ -32,6 +32,7 @@ Edit `src/data/site.json` without changing components:
 - `email`, `signupUrl`, `socials` (`{ "label": "...", "url": "https://..." }`): empty values show pending labels instead of broken links or fake forms. Use trusted HTTPS links. Footer social TODO must also be removed when links are added.
 - `meeting`: confirmed meeting schedule and location.
 - `links`: official resource links. `activities`: shared activity card and detail copy.
+- `pathways`: homepage audience cards with `audience`, `title`, `description`, `action`, and internal `page` slug. `faqs`: homepage disclosure items with `question` and `answer`; keep answers aligned with confirmed club information.
 
 Editorial text lives in `src/pages/[page].astro`; the homepage is `src/pages/index.astro`. Navigation, metadata, footer, and disclaimers live in `src/layouts/Layout.astro`. All remaining placeholder text is searchable with `rg TODO src README.md CREDITS.md`.
 
