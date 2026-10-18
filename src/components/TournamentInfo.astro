@@ -1,0 +1,5 @@
+---
+import {display} from '../lib/tournaments.mjs';
+const {label,value}=Astro.props;
+---
+<p class="tournament-info"><strong>{label}:</strong> <slot>{display(value)}</slot></p>

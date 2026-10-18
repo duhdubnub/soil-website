@@ -12,9 +12,3 @@ export function externalUrl(value) {
   if (!hasValue(value)) return null;
   try { const url=new URL(value);return url.protocol==='https:' ? url.href : null; } catch {return null;}
 }
-export function eventSchema(tournament) {
-  const date=dateValue(tournament.date);
-  if (!date || !hasValue(tournament.location)) return null;
-  return {'@context':'https://schema.org','@type':'Event',name:display(tournament.name),description:description(tournament),startDate:date.iso,location:{'@type':'Place',name:tournament.location},organizer:{'@type':'Organization',name:'Science Olympiad at Illinois'}};
-}
-export const serializeSchema = value => JSON.stringify(value).replace(/</g,'\\u003c');

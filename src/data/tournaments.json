@@ -6,13 +6,10 @@
       "featured": true,
       "description": null,
       "date": null,
-      "location": null,
       "divisions": null,
       "teamCap": null,
       "fee": null,
       "registration": {
-        "opens": null,
-        "closes": null,
         "url": null
       },
       "volunteerUrl": null,

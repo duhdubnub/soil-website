@@ -43,20 +43,18 @@ Section components live in `src/components/sections/`, assembled by `src/pages/i
 | `featured` | `true` renders a full-width card; `false` renders a smaller card below featured entries. Do not add placeholder tournaments. |
 | `description` | Body copy. Null/empty uses the approved default description for the 2027 SOIL Invitational; other tournaments show “To be announced.” |
 | `date` | ISO `YYYY-MM-DD`, or ISO datetime with explicit offset, e.g. `YYYY-MM-DDTHH:mm:ss-06:00`. Null, blank, or invalid dates display “To be announced.” Valid dates use `<time>`; the displayed day retains the supplied local calendar date. |
-| `location` | Plain-text venue name/address. Empty displays “To be announced.” No university marks. |
 | `divisions` | Text or array of division names, joined by commas. Empty displays “To be announced.” |
 | `teamCap` | Confirmed number or descriptive text; empty displays “To be announced.” Zero is preserved. |
 | `fee` | Confirmed display text including currency and basis; e.g. a fee per team. Empty displays “To be announced.” No payment collection is implemented. |
-| `registration.opens`, `.closes` | ISO dates as above. If both are empty, Registration shows “To be announced”; otherwise opens/closes display separately, with pending text for either missing date. |
 | `registration.url` | External HTTPS registration link. Empty or invalid means a genuinely disabled button with `aria-disabled`, labeled “Registration opens soon.” |
 | `volunteerUrl` | External HTTPS link. Empty/invalid hides the Volunteer section and sub-nav entry on the details page. |
 | `contactEmail` | Confirmed email for a mailto link; empty links to the home Contact section. |
 | `events` | Array of event-name strings only. Empty shows “Event list to be announced.” Do not paste rules or tests. |
 | `schedule` | Array of `{ "time": "HH:mm", "title": "Activity name" }`, in day-of order and local venue time. Empty shows “Schedule to be announced.” Missing/invalid time or empty title shows “To be announced.” Valid times use `<time>`. |
 
-Event JSON-LD appears on the invitational page only when a valid date and nonempty location are supplied, and includes only known fields. Structured data is safely serialized; no fictitious offers, capacity, attendance mode, or event status is added. Run `node scripts/check-tournaments.mjs` for date/null/URL/schema checks and `npm test` for built markup checks. All tournament data is rendered statically, with no new dependencies.
+Run `node scripts/check-tournaments.mjs` for date/null/URL checks and `npm test` for built markup checks. All tournament data is rendered statically, with no new dependencies. Event structured data is no longer emitted.
 
-Still needed for the tournament: description overrides if desired, date, venue/address, divisions, team cap, fee, registration opening/closing dates and HTTPS URL, optional volunteer URL, tournament contact email, event names, and day-of schedule. All currently remain null/empty. Confirm national invitational hosting guidelines, a Tournament Director form if required, and state chapter director permission before finalizing the tournament.
+Still needed for the tournament: description overrides if desired, date, divisions, team cap, fee, registration HTTPS URL, optional volunteer URL, tournament contact email, event names, and day-of schedule. All currently remain null/empty. Confirm national invitational hosting guidelines, a Tournament Director form if required, and state chapter director permission before finalizing the tournament.
 
 ## Design and assets
 
@@ -120,3 +118,9 @@ Additional optional fields in `src/data/tournaments.json`:
 | `team` | Array of `{ "name": "...", "role": "..." }`. Empty hides section/navigation. |
 
 The official black Science Olympiad PDF was downloaded successfully and converted with PyMuPDF to `public/logos/science-olympiad.svg` and `.png`. Only outer blank page margins were removed; all artwork, original colors, proportions, tagline and TM remain intact. The asset includes more than an S-height clear space, with additional white-panel padding in CSS. To replace it, use the official source, retain all artwork and recheck the brand guidelines. Source and permission links are recorded in CREDITS.md.
+
+### Tournament card and facts
+
+The home card is one navy column: title, date (or “Date to be announced”), description, Divisions, and two actions. The orange accent uses `#FD7B42` with navy text on the filled button. Text stays within 60ch; actions stack on mobile. `TournamentInfo.astro` supplies the reusable left-border lines. On the details page these show Date, Divisions, Teams (`teamCap`), and Fee; the headline banner shows Date and Format only.
+
+Registration data now has the shape `"registration": { "url": null }`. It contains only the external HTTPS URL; previous timing fields have been removed. The Registration section contains the button and optional platform link. Old venue data and the former facts panel have been removed.

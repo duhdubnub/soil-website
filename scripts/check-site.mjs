@@ -40,14 +40,13 @@ for(const link of data.joinLinks){
 }
 const tournament=html.match(/<section id="tournaments"[\s\S]*?<\/section>/)[0];
 assert(!tournament.includes('TODO'),'No raw tournament TODOs');
-assert(tournament.includes('<dl>'),'Semantic key facts');
+assert(tournament.includes('class="tournament-info"'),'Shared info lines');
 const tournaments=JSON.parse(readFileSync('src/data/tournaments.json','utf8')).tournaments;
 if(tournaments.length===1){
  const t=tournaments[0];
  if(!t.registration?.url)assert(tournament.includes('aria-disabled="true"')&&tournament.includes('Registration opens soon'),'Registration unavailable');
  if(!t.events?.length)assert(!tournament.includes('Event list to be announced'),'Events moved off home');
  if(!t.schedule?.length)assert(!tournament.includes('Schedule to be announced'),'Schedule moved off home');
- if(!t.date||!t.location)assert(!tournament.includes('application/ld+json'),'No premature Event schema');
  if(!t.contactEmail)assert(tournament.includes('href="#contact"'),'Contact fallback');
 }
 console.log('Passed: single page, six ordered sections, tournament pending states, navigation, hero, join links, assets and compliance copy.');
@@ -75,7 +74,15 @@ for(const [id,present] of [['updates',!!event.updates?.length],['volunteer',!!ev
 }
 if(!event.events?.length)assert(detail.includes('Event list to be announced'));
 if(!event.schedule?.length)assert(detail.includes('Schedule to be announced'));
-if(!event.date||!event.location)assert(!detail.includes('application/ld+json'));
 assert(detail.includes('href="/soil-website/#about"'));
 assert(/href="\/soil-website\/#tournaments" aria-current="location"/.test(detail));
 console.log('Passed: invitational routing, conditional navigation, shared assets, font preload, and pending content.');
+
+assert(!detail.includes('application/ld+json'));
+const facts=detail.match(/<h3>Key facts<\/h3>([\s\S]*?)<\/section>/)[1];
+assert.deepEqual([...facts.matchAll(/<strong>([^<]+):<\/strong>/g)].map(m=>m[1]),['Date','Divisions','Teams','Fee']);
+assert.equal((tournament.match(/class="tournament-info"/g)||[]).length,1);
+assert(!tournament.includes('Teams:')&&!tournament.includes('Fee:'));
+assert(tournament.indexOf('<h3>')<tournament.indexOf('tournament-date'));
+assert(tournament.indexOf('tournament-date')<tournament.indexOf('tournament-description'));
+assert.deepEqual(Object.keys(event.registration),['url']);
