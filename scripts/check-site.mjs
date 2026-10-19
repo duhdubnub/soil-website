@@ -54,6 +54,7 @@ data.officers.forEach((officer,i)=>{
  assert(officerCards[i].includes(`<h3>${esc(officer.name)}</h3>`)&&officerCards[i].includes(esc(officer.role)),`Officer ${officer.name} in order`);
  if(officer.favoriteEvent)assert(officerCards[i].includes(esc(officer.favoriteEvent)),`${officer.name} favorite event`);
  if(officer.favoriteMemory)assert(officerCards[i].includes(esc(officer.favoriteMemory)),`${officer.name} favorite memory`);
+ if(officer.email)assert(officerCards[i].includes(`href="mailto:${officer.email}"`),`${officer.name} email link`);
 });
 const hero=pages.home.match(/<section id="home"[\s\S]*?<\/section>/)[0];
 assert(hero.indexOf('hero-logo')<hero.indexOf('<h1')&&hero.indexOf('<h1')<hero.indexOf('hero-mission')&&hero.indexOf('hero-mission')<hero.indexOf('hero-actions'),'Hero order');
