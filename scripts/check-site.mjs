@@ -89,6 +89,9 @@ data.communityCards.forEach((card,i)=>{
  assert(communityCards[i].includes(`<h2>${card.title.replaceAll('&','&amp;')}</h2>`)&&communityCards[i].includes(card.description.replaceAll("'",'&#39;')),`Community card ${card.title}`);
  if(card.contactEmail)assert(communityCards[i].includes(data.email?`href="mailto:${data.email}"`:'href="/soil-website/contact/"'),'Community card email or Contact page link');
 });
+// Contact page: club email as the preferred contact, plus a link to the officer list.
+if(data.email)assert(pages.contact.includes(`href="mailto:${data.email}"`)&&pages.contact.includes('preferred way to reach'),'Contact page club email message');
+assert(pages.contact.includes('href="/soil-website/about/#team"')&&pages.about.includes('id="team"'),'Contact page links to About Team');
 const galleryBlock=pages.community.match(/<div id="gallery"[\s\S]*?<\/section>/)?.[0]??'';
 if(data.gallery.length){
  assert(galleryBlock.includes('id="gallery-title">Gallery</h2>')&&pages.community.indexOf('class="highlight-grid')<pages.community.indexOf('id="gallery"'),'Gallery follows Community cards');
