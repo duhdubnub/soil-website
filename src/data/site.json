@@ -15,6 +15,18 @@
       "contactEmail": true
     }
   ],
+  "gallery": [
+    {
+      "src": "/gallery/uchicago-event.webp",
+      "alt": "About twenty club members in matching black shirts standing on a theater stage beside a Science Olympiad table",
+      "caption": "[January 2025] Club members volunteering at the University of Chicago Invitational."
+    },
+    {
+      "src": "/gallery/state-tournament-2026.webp",
+      "alt": "Ten club members standing behind a podium beneath the Illinois Science Olympiad State Tournament screen in a University of Illinois gym",
+      "caption": "[April 2026] Volunteering with University of Chicago students for the ISO State Tournament on campus!"
+    }
+  ],
   "joinIntro": "Interested in helping out with the Science Olympiad mission on campus? Join the OneIllinois group and the Discord to learn more about our mission and to learn more about how to list club announcements about our events.",
   "address": [
     "Science Olympiad at Illinois",
@@ -47,7 +59,7 @@
       "favoriteEvent": "Air Trajectory",
       "favoriteMemory": "Getting Culvers with the team every year after State competition",
       "photo": "/officers/aneesh-pushparaj.webp",
-      "email": ""
+      "email": "aneeshvp@illinois.edu"
     },
     {
       "name": "Lucas Niu",
@@ -136,7 +148,6 @@
     "science": "Science Olympiad brings students together through team-based science and engineering competition. Participants explore scientific knowledge, problem-solving, and hands-on skills.",
     "identity": "Science Olympiad at Illinois is an independent Registered Student Organization at the University of Illinois Urbana-Champaign. We connect through STEM and service while supporting students and local teams.",
     "story": "A shared interest in Science Olympiad connects our community. Our verified founding story and milestones will be added here.",
-    "historyTodo": "[TODO: founding history and verified milestones]",
     "chapter": "Science Olympiad at Illinois is an official alumni chapter registered with Science Olympiad, Inc."
   },
   "joinLinks": [

@@ -23,8 +23,8 @@ for(const [id,html] of Object.entries(pages)){
  assert(html.includes('Science Olympiad at Illinois is an official alumni chapter registered with Science Olympiad, Inc. Science Olympiad and the Science Olympiad logo are trademarks of Science Olympiad, Inc.'),'Chapter and trademark notice');
  const address=html.match(/<address class="footer-address">[\s\S]*?<\/address>/)?.[0]??'';
  for(const line of data.address)assert(address.includes(line),`Footer address line ${line}`);
- assert(data.email?address.includes(`href="mailto:${data.email}"`):address.includes('[TODO: public club email]'),'Footer email or placeholder');
- assert(!html.includes('confirm exact trademark notice wording'),'Trademark TODO removed');
+ if(data.email)assert(address.includes(`href="mailto:${data.email}"`),'Footer email');
+ assert(!/\[TODO/i.test(html),`No TODO placeholders on ${id}`);
  assert(html.includes('Skip to content')&&html.includes('aria-controls="navigation"'),'Navigation accessibility');
  assert(html.includes('property="og:image"')&&html.includes('name="description"'),'Metadata');
  for(const img of html.matchAll(/<img\b[^>]*>/g))assert(/\balt=/.test(img[0]),'Image alt attribute');
@@ -46,7 +46,7 @@ for(const link of data.links)assert(pages.about.includes(`href="${link.url}"`),`
 assert(!/about-columns|activity-grid/.test(pages.about),'About shows only mission, Science Olympiad summary, resource links, and team');
 assert(pages.about.indexOf('class="resource-row')<pages.about.indexOf('id="team"')&&pages.about.includes('class="team-grid'),'Team follows About resource links');
 assert(!all.includes('/soil-website/team/')&&!existsSync('dist/team'),'No standalone Team page');
-const officerGrid=pages.about.match(/<div class="team-grid officer-grid">[\s\S]*?<\/div><p class="todo">/)[0];
+const officerGrid=pages.about.match(/<div class="team-grid officer-grid">[\s\S]*?<\/article><\/div>/)[0];
 const officerCards=[...officerGrid.matchAll(/<article class="officer-card">[\s\S]*?<\/article>/g)].map(m=>m[0]);
 assert.equal(officerCards.length,data.officers.length,'One card per officer');
 const esc=(s)=>s.replaceAll('&','&amp;');
@@ -87,10 +87,19 @@ const communityCards=[...pages.community.matchAll(/<article class="highlight-car
 assert.equal(communityCards.length,data.communityCards.length,'Community cards');
 data.communityCards.forEach((card,i)=>{
  assert(communityCards[i].includes(`<h2>${card.title.replaceAll('&','&amp;')}</h2>`)&&communityCards[i].includes(card.description.replaceAll("'",'&#39;')),`Community card ${card.title}`);
- if(card.contactEmail)assert(data.email?communityCards[i].includes(`href="mailto:${data.email}"`):communityCards[i].includes('[TODO: public club email]'),'Community card email or placeholder');
+ if(card.contactEmail)assert(communityCards[i].includes(data.email?`href="mailto:${data.email}"`:'href="/soil-website/contact/"'),'Community card email or Contact page link');
 });
-assert(!pages.community.includes('[TODO: outreach programs'),'Community outreach placeholder replaced');
-assert(pages.community.includes(`<p>${data.communityIntro.replaceAll("'",'&#39;')}</p>`)&&!pages.community.includes('[TODO: short community impact introduction]'),'Community intro');
+// Contact page: club email as the preferred contact, plus a link to the officer list.
+if(data.email)assert(pages.contact.includes(`href="mailto:${data.email}"`)&&pages.contact.includes('preferred way to reach'),'Contact page club email message');
+assert(pages.contact.includes('href="/soil-website/about/#team"')&&pages.about.includes('id="team"'),'Contact page links to About Team');
+const galleryBlock=pages.community.match(/<div id="gallery"[\s\S]*?<\/section>/)?.[0]??'';
+if(data.gallery.length){
+ assert(galleryBlock.includes('id="gallery-title">Gallery</h2>')&&pages.community.indexOf('class="highlight-grid')<pages.community.indexOf('id="gallery"'),'Gallery follows Community cards');
+ const photos=[...galleryBlock.matchAll(/<figure>[\s\S]*?<\/figure>/g)].map(m=>m[0]);
+ assert.equal(photos.length,data.gallery.length,'One figure per gallery photo');
+ data.gallery.forEach((photo,i)=>assert(photo.alt.trim()&&photos[i].includes(`alt="${photo.alt}"`),`Gallery photo ${i+1} has alt text`));
+}else assert(!galleryBlock,'Gallery hidden when there are no photos');
+assert(pages.community.includes(`<p>${data.communityIntro.replaceAll("'",'&#39;')}</p>`),'Community intro');
 console.log('Passed: six pages, page navigation, home highlights, tournament pending states, hero, join links and compliance copy.');
 
 const detail=readFileSync('dist/invitational/index.html','utf8');
