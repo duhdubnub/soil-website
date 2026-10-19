@@ -30,9 +30,10 @@ Edit `src/data/site.json`. General club links are centralized here; tournament-s
 - `missionStatement`: the club's official mission statement, rendered verbatim at the top of About. Keep the University naming rule: write "University of Illinois", not "UIUC".
 - `communityImpact`: summary shown on the Home page's Community Impact card.
 - `communityIntro`: short description under the Community page heading.
-- `communityCards`: the side-by-side cards on the Community page, each `{ "title": "...", "description": "..." }`. Add `"contactEmail": true` to end a card's description with the club `email` (or its `[TODO]` placeholder while `email` is empty).
+- `communityCards`: the side-by-side cards on the Community page, each `{ "title": "...", "description": "..." }`. Add `"contactEmail": true` to end a card's description with the club `email` (or a link to the Contact page if `email` is ever empty).
+- `gallery`: club photos shown in the Gallery section below the Community cards, in order. Each entry is `{ "src": "/gallery/name.webp", "alt": "What the photo shows", "caption": "Optional short caption" }`. Put images in `public/gallery/` (about 800px wide WebP). Photos show uncropped at their own shape with rounded corners, four per row (two on tablets, one on phones), centered when a row isn't full, with captions centered below. Captions follow the "[Month Year] What happened" style. `alt` is required; `caption` is optional. Only publish photos the people pictured have agreed to share. While the list is empty, the Gallery section is hidden.
 - `joinIntro`: description under the Get Involved heading on the Join page.
-- `about`: Science Olympiad explanation, independent RSO identity, story, and history TODO. Only `about.science` is rendered: the About page shows the mission statement beside "What is Science Olympiad?", then the `links`, then the officer Team block from `officers`. The other fields are kept for possible reuse.
+- `about`: Science Olympiad explanation, independent RSO identity, and story. Only `about.science` is rendered: the About page shows the mission statement beside "What is Science Olympiad?", then the `links`, then the officer Team block from `officers`. The other fields are kept for possible reuse.
 - `activities`: four card titles and descriptions, retained but not currently rendered.
 - `stats`: retained for future verified figures but not rendered. An impact strip is optional; do not publish unsupported totals.
 
@@ -92,9 +93,9 @@ Astro configuration uses `site: 'https://duhdubnub.github.io'`, `base: '/soil-we
 
 ## Full TODO list and open legal items
 
-- [ ] Supply verified founding history and milestones (`about.historyTodo`).
-- [ ] Replace officer-name and officer-role placeholders and complete the roster.
-- [ ] Obtain consent for officer photos; replace the labeled photo placeholder and confirm permission for optional published emails.
+- [ ] Supply verified founding history and milestones if a history section is added (`about.story`, not currently shown).
+- [x] Officer roster complete (`officers`).
+- [ ] Obtain consent for the remaining officer photos (cards show initials until then) and for any further published officer emails.
 - [x] Confirmed public club email: sciolyatillinois@gmail.com (`email`, Contact).
 - [ ] Confirm the exact chapter-status and trademark notice wording with Science Olympiad, Inc. (footer).
 - [ ] Confirm the Science Olympiad, Inc. guidelines for hosting invitationals, a Tournament Director form on file if required, and state chapter director permission. Do not imply sanctioned status or endorsement.
@@ -103,7 +104,7 @@ Astro configuration uses `site: 'https://duhdubnub.github.io'`, `base: '/soil-we
 - [ ] Enable Pages with GitHub Actions and verify deployment.
 - [ ] Complete production Lighthouse and keyboard/mobile review before claiming measured 90+ scores or full accessibility conformance.
 
-The three supplied Join URLs are implemented, not placeholders. Unknown tournament details render human-readable pending states, never raw TODOs. No forms or payments are collected. Find remaining placeholders with `rg TODO src README.md CREDITS.md`.
+The three supplied Join URLs are implemented, not placeholders. Unknown tournament details render human-readable pending states, never raw TODOs. No forms or payments are collected. No page shows a `[TODO]` placeholder; `npm test` fails if one appears. Find remaining placeholders in source with `rg TODO src README.md CREDITS.md`.
 
 ## Legal
 
