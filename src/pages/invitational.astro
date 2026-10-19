@@ -20,7 +20,7 @@ const sections=[['About','about'],['Registration','registration'],['Events','eve
 <Layout eventPage page="tournaments" title={`${display(t.name)} | Science Olympiad at Illinois`} description={description(t)}>
   <div id="event-top" class="event-header container">
     <a class="text-link" href={`${base}/tournaments/`}>← Back to Tournaments</a>
-    <div class="event-title"><img src={`${base}/logo.webp`} alt="SOIL club logo" width="120" height="120"/><h1>{display(t.name)}</h1></div>
+    <div class="event-title"><img src={`${base}/logo.svg`} alt="SOIL club logo" width="120" height="120"/><h1>{display(t.name)}</h1></div>
     <dl class="event-banner"><div><dt>Date</dt><dd><TournamentDate value={t.date}/></dd></div><div><dt>Format</dt><dd>{display(t.format)}</dd></div></dl>
   </div>
   <nav class="event-nav" aria-label="Invitational navigation"><div class="container">{sections.map(([label,id])=><a href={`#${id}`} data-event-link={id} aria-current={id==='about'?'location':undefined}>{label}</a>)}</div></nav>
