@@ -24,7 +24,7 @@ Edit `src/data/site.json`. General club links are centralized here; tournament-s
 - `joinLinks`: the three cards and footer icon links, in order. Fields: `id`, `icon` (local SVG filename without extension), `title`, `description`, `button`, `url`, and `primary`. The supplied OneIllinois link is primary, followed by Discord and Instagram. Keep the Instagram handle exact. All three destinations open in a new tab with `noopener noreferrer` and descriptive accessible names.
 - `links`: National Science Olympiad and Illinois Science Olympiad resource labels and URLs, shared by About and footer.
 - `address`: club mailing address lines, shown in every page's footer beside the legal notices; the first line is bold.
-- `email`: public club email, shown on the Contact page and under the footer address. Leave empty until confirmed; the site displays `[TODO: public club email]`. A nonempty value creates a real `mailto:` link. Do not invent an email or create an invalid placeholder mailto link.
+- `email`: public club email, `sciolyatillinois@gmail.com`, rendered as a `mailto:` link.
 - `officers`: `{ "name": "...", "role": "...", "favoriteEvent": "...", "favoriteMemory": "...", "photo": "/officers/name.webp", "email": "" }`, in display order. The About page's Team block shows four officer cards per row on desktop (two on tablets, one on phones); keep the favorites short so cards stay compact. Put approved images under `public/officers/` as portrait headshots (about 600px wide WebP; cards show a 4:5 frame anchored near the top, so keep the face in the upper half); local paths receive the deployment base automatically. Without a photo, the card shows the officer's initials. Favorites, photo, and email are optional. Obtain consent before publication. Write "Science Olympiad", never "SciOly".
 - `mission`: short Hero summary, rendered verbatim in Hero.
 - `missionStatement`: the club's official mission statement, rendered verbatim at the top of About. Keep the University naming rule: write "University of Illinois", not "UIUC".
@@ -95,7 +95,7 @@ Astro configuration uses `site: 'https://duhdubnub.github.io'`, `base: '/soil-we
 - [ ] Supply verified founding history and milestones (`about.historyTodo`).
 - [ ] Replace officer-name and officer-role placeholders and complete the roster.
 - [ ] Obtain consent for officer photos; replace the labeled photo placeholder and confirm permission for optional published emails.
-- [ ] Supply a confirmed public club email (`email`, Contact).
+- [x] Confirmed public club email: sciolyatillinois@gmail.com (`email`, Contact).
 - [ ] Confirm the exact chapter-status and trademark notice wording with Science Olympiad, Inc. (footer).
 - [ ] Confirm the Science Olympiad, Inc. guidelines for hosting invitationals, a Tournament Director form on file if required, and state chapter director permission. Do not imply sanctioned status or endorsement.
 - [ ] Record any future third-party asset and license in `CREDITS.md`; no credits or legal page is published.
