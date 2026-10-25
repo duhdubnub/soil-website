@@ -6,14 +6,14 @@ const data=JSON.parse(readFileSync('src/data/site.json','utf8'));
 const files=(dir)=>readdirSync(dir,{withFileTypes:true}).flatMap(f=>f.isDirectory()?files(join(dir,f.name)):[join(dir,f.name)]);
 // One page per main navigation entry, plus the invitational details page.
 const order=['home','about','community','tournaments','join','contact'];
-const url=(id)=>id==='home'?'/soil-website/':`/soil-website/${id}/`;
+const url=(id)=>id==='home'?'/':`/${id}/`;
 const pages=Object.fromEntries(order.map(id=>[id,readFileSync(id==='home'?'dist/index.html':`dist/${id}/index.html`,'utf8')]));
 assert.equal(files('dist').filter(f=>f.endsWith('.html')).length,order.length+1,'Main pages and invitational page');
 for(const [id,html] of Object.entries(pages)){
  const sections=[...html.matchAll(/<section\b[^>]*\bid="([^"]+)"/g)].map(m=>m[1]);
  assert.deepEqual(sections,id==='home'?['home','highlights']:[id],`Sections on ${id}`);
  assert.equal((html.match(/<h1\b/g)||[]).length,1,`One h1 on ${id}`);
- assert(html.includes(`<link rel="canonical" href="https://duhdubnub.github.io${url(id)}">`),`Canonical ${id}`);
+ assert(html.includes(`<link rel="canonical" href="https://sciolyatillinois.org${url(id)}">`),`Canonical ${id}`);
  const nav=html.match(/<nav id="navigation"[\s\S]*?<\/nav>/)[0];
  assert.deepEqual([...nav.matchAll(/href="([^"]+)"/g)].map(m=>m[1]),order.map(url),'Navigation page order');
  assert.deepEqual([...nav.matchAll(/<a href="([^"]+)" aria-current="page"/g)].map(m=>m[1]),[url(id)],`Current page ${id}`);
@@ -25,6 +25,7 @@ for(const [id,html] of Object.entries(pages)){
  for(const line of data.address)assert(address.includes(line),`Footer address line ${line}`);
  if(data.email)assert(address.includes(`href="mailto:${data.email}"`),'Footer email');
  assert(!/\[TODO/i.test(html),`No TODO placeholders on ${id}`);
+ assert(!/\/soil-website|duhdubnub\.github\.io/.test(html),`No old GitHub Pages paths on ${id}`);
  assert(html.includes('Skip to content')&&html.includes('aria-controls="navigation"'),'Navigation accessibility');
  assert(html.includes('property="og:image"')&&html.includes('name="description"'),'Metadata');
  for(const img of html.matchAll(/<img\b[^>]*>/g))assert(/\balt=/.test(img[0]),'Image alt attribute');
@@ -45,7 +46,7 @@ assert(aboutGrid.indexOf(data.missionStatement)<aboutGrid.indexOf('What is Scien
 for(const link of data.links)assert(pages.about.includes(`href="${link.url}"`),`About resource link ${link.label}`);
 assert(!/about-columns|activity-grid/.test(pages.about),'About shows only mission, Science Olympiad summary, resource links, and team');
 assert(pages.about.indexOf('class="resource-row')<pages.about.indexOf('id="team"')&&pages.about.includes('class="team-grid'),'Team follows About resource links');
-assert(!all.includes('/soil-website/team/')&&!existsSync('dist/team'),'No standalone Team page');
+assert(!all.includes('href="/team/"')&&!existsSync('dist/team'),'No standalone Team page');
 const officerGrid=pages.about.match(/<div class="team-grid officer-grid">[\s\S]*?<\/article><\/div>/)[0];
 const officerCards=[...officerGrid.matchAll(/<article class="officer-card">[\s\S]*?<\/article>/g)].map(m=>m[0]);
 assert.equal(officerCards.length,data.officers.length,'One card per officer');
@@ -59,7 +60,7 @@ data.officers.forEach((officer,i)=>{
 const hero=pages.home.match(/<section id="home"[\s\S]*?<\/section>/)[0];
 assert(hero.indexOf('hero-logo')<hero.indexOf('<h1')&&hero.indexOf('<h1')<hero.indexOf('hero-mission')&&hero.indexOf('hero-mission')<hero.indexOf('hero-actions'),'Hero order');
 assert.equal((hero.match(/<p\b/g)||[]).length,1,'Only mission paragraph in hero');
-assert(hero.indexOf('href="/soil-website/join/"')<hero.indexOf('href="/soil-website/about/"'),'Hero buttons link to Join and About pages');
+assert(hero.indexOf('href="/join/"')<hero.indexOf('href="/about/"'),'Hero buttons link to Join and About pages');
 const joinSection=pages.join.match(/<section id="join"[\s\S]*?<\/section>/)[0];
 assert(joinSection.includes(`<p>${data.joinIntro}</p>`),'Join page description');
 let previous=-1;
@@ -73,26 +74,26 @@ if(tournaments.length===1){
  if(!t.registration?.url)assert(tournament.includes('aria-disabled="true"')&&tournament.includes('Registration opens soon'),'Registration unavailable');
  if(!t.events?.length)assert(!tournament.includes('Event list to be announced'),'Events kept on details page');
  if(!t.schedule?.length)assert(!tournament.includes('Schedule to be announced'),'Schedule kept on details page');
- if(!t.contactEmail)assert(tournament.includes('href="/soil-website/contact/"'),'Contact fallback');
+ if(!t.contactEmail)assert(tournament.includes('href="/contact/"'),'Contact fallback');
 }
 // Home highlight cards: Community Impact first, then the featured tournament.
 const highlights=pages.home.match(/<section id="highlights"[\s\S]*?<\/section>/)[0];
 const featured=tournaments.find(t=>t.featured)??tournaments[0];
 const cards=[...highlights.matchAll(/<article class="highlight-card[\s\S]*?<\/article>/g)].map(m=>m[0]);
 assert.equal(cards.length,2,'Two highlight cards');
-assert(cards[0].includes('Community Impact')&&cards[0].includes('href="/soil-website/community/"'),'Community Impact card links to Community page');
+assert(cards[0].includes('Community Impact')&&cards[0].includes('href="/community/"'),'Community Impact card links to Community page');
 assert(cards[0].includes(data.communityImpact.replaceAll("'",'&#39;'))&&!cards[0].includes('TODO'),'Community Impact card text');
-assert(cards[1].includes(featured.name)&&cards[1].includes('href="/soil-website/tournaments/"')&&cards[1].includes('Info + Register'),'Tournament card links to Tournaments page');
+assert(cards[1].includes(featured.name)&&cards[1].includes('href="/tournaments/"')&&cards[1].includes('Info + Register'),'Tournament card links to Tournaments page');
 // Community page: one card per communityCards entry, side by side, with the email (or its placeholder) on contact cards.
 const communityCards=[...pages.community.matchAll(/<article class="highlight-card">[\s\S]*?<\/article>/g)].map(m=>m[0]);
 assert.equal(communityCards.length,data.communityCards.length,'Community cards');
 data.communityCards.forEach((card,i)=>{
  assert(communityCards[i].includes(`<h2>${card.title.replaceAll('&','&amp;')}</h2>`)&&communityCards[i].includes(card.description.replaceAll("'",'&#39;')),`Community card ${card.title}`);
- if(card.contactEmail)assert(communityCards[i].includes(data.email?`href="mailto:${data.email}"`:'href="/soil-website/contact/"'),'Community card email or Contact page link');
+ if(card.contactEmail)assert(communityCards[i].includes(data.email?`href="mailto:${data.email}"`:'href="/contact/"'),'Community card email or Contact page link');
 });
 // Contact page: club email as the preferred contact, plus a link to the officer list.
 if(data.email)assert(pages.contact.includes(`href="mailto:${data.email}"`)&&pages.contact.includes('preferred way to reach'),'Contact page club email message');
-assert(pages.contact.includes('href="/soil-website/about/#team"')&&pages.about.includes('id="team"'),'Contact page links to About Team');
+assert(pages.contact.includes('href="/about/#team"')&&pages.about.includes('id="team"'),'Contact page links to About Team');
 const galleryBlock=pages.community.match(/<div id="gallery"[\s\S]*?<\/section>/)?.[0]??'';
 if(data.gallery.length){
  assert(galleryBlock.includes('id="gallery-title">Gallery</h2>')&&pages.community.indexOf('class="highlight-grid')<pages.community.indexOf('id="gallery"'),'Gallery follows Community cards');
@@ -105,7 +106,7 @@ console.log('Passed: six pages, page navigation, home highlights, tournament pen
 
 const detail=readFileSync('dist/invitational/index.html','utf8');
 assert(detail.includes('<title>2027 SOIL Satellite Invitational | Science Olympiad at Illinois</title>'));
-assert(tournament.includes('href="/soil-website/invitational/"'));
+assert(tournament.includes('href="/invitational/"'));
 assert(!detail.includes('application/ld+json'));
 for(const page of [...Object.values(pages),detail]){
  assert.equal((page.match(/<h1\b/g)||[]).length,1);
@@ -115,8 +116,8 @@ for(const page of [...Object.values(pages),detail]){
  assert.equal(new Set(pageIds).size,pageIds.length,'Unique IDs');
  for(const [,id] of page.matchAll(/href="#([^"]+)"/g))assert(pageIds.includes(id),`Anchor target ${id}`);
  for(const [,path] of page.matchAll(/(?:href|src|srcset)="(\/[^"#?]*)(?:#[^"]*)?"/g)){
-  assert(path.startsWith('/soil-website/'),`Base path ${path}`);
-  const target=join('dist',path.slice('/soil-website/'.length));assert(existsSync(path.endsWith('/')?join(target,'index.html'):target),`Asset ${path}`);
+  assert(!path.startsWith('//'),`Root-relative path ${path}`);
+  const target=join('dist',path.slice(1));assert(existsSync(path.endsWith('/')?join(target,'index.html'):target),`Asset ${path}`);
  }
 }
 const event=tournaments.find(t=>t.id==='2027-soil-invitational');
@@ -126,8 +127,8 @@ for(const [id,present] of [['updates',!!event.updates?.length],['volunteer',!!ev
 }
 if(!event.events?.length)assert(detail.includes('Event list to be announced'));
 if(!event.schedule?.length)assert(detail.includes('Schedule to be announced'));
-assert(detail.includes('href="/soil-website/tournaments/">← Back to Tournaments'));
-assert(/href="\/soil-website\/tournaments\/" aria-current="page"/.test(detail));
+assert(detail.includes('href="/tournaments/">← Back to Tournaments'));
+assert(/href="\/tournaments\/" aria-current="page"/.test(detail));
 console.log('Passed: invitational routing, conditional navigation, shared assets, font preload, and pending content.');
 
 const facts=detail.match(/<h3>Key facts<\/h3>([\s\S]*?)<\/section>/)[1];
