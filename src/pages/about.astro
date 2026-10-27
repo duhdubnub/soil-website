@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import About from '../components/sections/About.astro';
+import data from '../data/site.json';
 ---
-<Layout page="about" title="About | Science Olympiad at Illinois"><About/></Layout>
+<Layout page="about" title="About | Science Olympiad at Illinois" description={data.seo.about}><About/></Layout>

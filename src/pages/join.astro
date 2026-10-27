@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Join from '../components/sections/Join.astro';
+import data from '../data/site.json';
 ---
-<Layout page="join" title="Join | Science Olympiad at Illinois"><Join/></Layout>
+<Layout page="join" title="Join | Science Olympiad at Illinois" description={data.seo.join}><Join/></Layout>

@@ -8,7 +8,10 @@ const files=(dir)=>readdirSync(dir,{withFileTypes:true}).flatMap(f=>f.isDirector
 const order=['home','about','community','tournaments','join','contact'];
 const url=(id)=>id==='home'?'/':`/${id}/`;
 const pages=Object.fromEntries(order.map(id=>[id,readFileSync(id==='home'?'dist/index.html':`dist/${id}/index.html`,'utf8')]));
-assert.equal(files('dist').filter(f=>f.endsWith('.html')).length,order.length+1,'Main pages and invitational page');
+// Google Search Console ownership file: must stay published unchanged at the site root, or Google revokes verification.
+const googleVerification='google26416d21fdc69b58.html';
+assert.equal(readFileSync(join('dist',googleVerification),'utf8').trim(),`google-site-verification: ${googleVerification}`,'Google Search Console verification file');
+assert.equal(files('dist').filter(f=>f.endsWith('.html')&&!f.endsWith(googleVerification)).length,order.length+1,'Main pages and invitational page');
 for(const [id,html] of Object.entries(pages)){
  const sections=[...html.matchAll(/<section\b[^>]*\bid="([^"]+)"/g)].map(m=>m[1]);
  assert.deepEqual(sections,id==='home'?['home','highlights']:[id],`Sections on ${id}`);
@@ -31,7 +34,10 @@ for(const [id,html] of Object.entries(pages)){
  for(const img of html.matchAll(/<img\b[^>]*>/g))assert(/\balt=/.test(img[0]),'Image alt attribute');
  assert(!/class="[^"]*(?:eyebrow|kicker|card-number|emblem-caption)/.test(html),'No floating labels');
  assert(!/<form\b/.test(html),'No forms');
- assert(!html.includes('application/ld+json'));
+ // Search metadata: each page has its own description and the shared site name; only Home carries structured data.
+ assert.equal([...html.matchAll(/<meta name="description" content="([^"]*)"/g)].map(m=>m[1].replaceAll('&#39;',"'"))[0],data.seo[id],`SEO description ${id}`);
+ assert(html.includes(`<meta property="og:site_name" content="${data.name}">`)&&html.includes('<link rel="sitemap" href="/sitemap-index.xml">'),`Site name and sitemap link ${id}`);
+ assert.equal(html.includes('application/ld+json'),id==='home',`Structured data only on Home (${id})`);
  for(const link of data.joinLinks){
   const anchors=[...html.matchAll(/<a\b[^>]*>/g)].map(m=>m[0]).filter(a=>a.includes(`href="${link.url}"`));
   assert.equal(anchors.length,id==='join'?2:1,'Join and footer links');
@@ -39,6 +45,17 @@ for(const [id,html] of Object.entries(pages)){
  }
 }
 const all=Object.values(pages).join('');
+assert.equal(new Set(Object.values(data.seo)).size,Object.keys(data.seo).length,'Unique page descriptions');
+for(const text of Object.values(data.seo))assert(text.length<=155,`Description fits search snippet: ${text}`);
+assert(pages.home.includes(`<title>${data.name}</title>`),'Home title is the plain club name');
+const ld=JSON.parse(pages.home.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+const website=ld['@graph'].find(n=>n['@type']==='WebSite'), org=ld['@graph'].find(n=>n['@type']==='Organization');
+assert(website.name===data.name&&website.url===data.url&&org.name===data.name&&org.url===data.url&&org.email===data.email,'WebSite and Organization structured data');
+assert.deepEqual(org.sameAs,data.joinLinks.map(link=>link.url),'Organization profile links');
+// Crawling: robots.txt points at the generated sitemap, which lists every page on the domain.
+assert(readFileSync('dist/robots.txt','utf8').includes(`Sitemap: ${data.url}sitemap-index.xml`),'robots.txt sitemap');
+const sitemapUrls=[...readFileSync('dist/sitemap-0.xml','utf8').matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>m[1]).sort();
+assert.deepEqual(sitemapUrls,[...order.map(id=>`https://sciolyatillinois.org${url(id)}`),'https://sciolyatillinois.org/invitational/'].sort(),'Sitemap lists every page');
 assert.equal(all.split(data.mission).length-1,1,'Verbatim mission in hero');
 assert.equal(pages.about.split(data.missionStatement).length-1,1,'Verbatim mission statement in About');
 const aboutGrid=pages.about.match(/<div class="about-grid[\s\S]*?<\/div><\/div><\/div>/)[0];

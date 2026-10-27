@@ -3,7 +3,8 @@ import '../styles/global.css';
 import '../styles/tournaments.css';
 import data from '../data/site.json';
 const base=import.meta.env.BASE_URL.replace(/\/$/,'');
-const {page='home',eventPage=false,title=`${data.name} | SOIL`,description='Join Science Olympiad at Illinois: support competitions, mentor local teams, and connect through STEM and service.'}=Astro.props;
+// The home page title is the plain club name so search results show "Science Olympiad at Illinois".
+const {page='home',eventPage=false,title=data.name,description=data.seo.home,structuredData}=Astro.props;
 const top=eventPage?'event-top':'main';
 const canonical=new URL(Astro.url.pathname,Astro.site);
 
@@ -13,7 +14,7 @@ const pageUrl=(id:string)=>id==='home'?`${base}/`:`${base}/${id}/`;
 ---
 <!doctype html>
 <html lang="en">
-<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>{title}</title><meta name="description" content={description}/><meta name="theme-color" content="#022954"/><link rel="canonical" href={canonical}/><link rel="icon" type="image/png" href={`${base}/favicon.png?v=white-1`}/><meta property="og:title" content={title}/><meta property="og:description" content={description}/><meta property="og:type" content="website"/><meta property="og:url" content={canonical}/><meta property="og:image" content={new URL(`${base}/logo.png`,Astro.site)}/><meta property="og:image:alt" content="SOIL club atom emblem in navy and orange"/><meta name="twitter:card" content="summary"/><link rel="preload" href={`${base}/fonts/Geist-Variable.woff2`} as="font" type="font/woff2" crossorigin="anonymous"/><style is:inline set:html={`@font-face{font-family:Geist;src:url("${base}/fonts/Geist-Variable.woff2") format("woff2");font-style:normal;font-weight:100 900;font-display:swap}`}/></head>
+<head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>{title}</title><meta name="description" content={description}/><meta name="theme-color" content="#022954"/><link rel="canonical" href={canonical}/><link rel="icon" type="image/png" href={`${base}/favicon.png?v=white-1`}/><meta property="og:title" content={title}/><meta property="og:description" content={description}/><meta property="og:type" content="website"/><meta property="og:site_name" content={data.name}/><meta property="og:url" content={canonical}/><meta property="og:image" content={new URL(`${base}/logo.png`,Astro.site)}/><meta property="og:image:alt" content="SOIL club atom emblem in navy and orange"/><meta name="twitter:card" content="summary"/><link rel="sitemap" href={`${base}/sitemap-index.xml`}/>{structuredData&&<script type="application/ld+json" set:html={JSON.stringify(structuredData)}/>}<link rel="preload" href={`${base}/fonts/Geist-Variable.woff2`} as="font" type="font/woff2" crossorigin="anonymous"/><style is:inline set:html={`@font-face{font-family:Geist;src:url("${base}/fonts/Geist-Variable.woff2") format("woff2");font-style:normal;font-weight:100 900;font-display:swap}`}/></head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header"><div class="container nav-shell"><a class="brand" href={pageUrl('home')} aria-label="Science Olympiad at Illinois home"><img src={`${base}/logo.svg`} width="48" height="48" alt="SOIL club logo"/><span>Science Olympiad<span class="brand-second">at Illinois</span></span></a><button class="menu-toggle" aria-expanded="false" aria-controls="navigation"><span>Menu</span><span aria-hidden="true">☰</span></button><nav id="navigation" aria-label="Main navigation">{nav.map(([label,id])=><a href={pageUrl(id)} aria-current={id===page?'page':undefined}>{label}</a>)}</nav></div></header>

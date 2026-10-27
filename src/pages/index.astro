@@ -2,5 +2,20 @@
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/sections/Hero.astro';
 import HomeHighlights from '../components/sections/HomeHighlights.astro';
+import data from '../data/site.json';
+
+// Structured data for search engines: WebSite sets the site name shown in results,
+// Organization describes the club. Built from site.json so it stays in sync with the page.
+const [cityLine]=data.address.slice(-1);
+const [, city='', region='', postalCode='']=cityLine.match(/^(.+),\s*([A-Z]{2})\s+(\d{5})$/)??[];
+const structuredData={
+  '@context':'https://schema.org',
+  '@graph':[
+    {'@type':'WebSite','@id':`${data.url}#website`,name:data.name,alternateName:data.shortName,url:data.url,publisher:{'@id':`${data.url}#organization`}},
+    {'@type':'Organization','@id':`${data.url}#organization`,name:data.name,alternateName:data.shortName,url:data.url,logo:new URL('/logo.png',data.url).href,description:data.seo.home,email:data.email,
+      address:{'@type':'PostalAddress',streetAddress:data.address.slice(1,-1).join(', '),addressLocality:city,addressRegion:region,postalCode,addressCountry:'US'},
+      sameAs:data.joinLinks.map(link=>link.url)}
+  ]
+};
 ---
-<Layout page="home"><Hero/><HomeHighlights/></Layout>
+<Layout page="home" structuredData={structuredData}><Hero/><HomeHighlights/></Layout>
