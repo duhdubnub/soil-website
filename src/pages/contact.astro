@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Contact from '../components/sections/Contact.astro';
+import data from '../data/site.json';
 ---
-<Layout page="contact" title="Contact | Science Olympiad at Illinois"><Contact/></Layout>
+<Layout page="contact" title="Contact | Science Olympiad at Illinois" description={data.seo.contact}><Contact/></Layout>
