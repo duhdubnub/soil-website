@@ -1,5 +1,6 @@
 ---
 import data from '../../data/site.json';
 import Team from './Team.astro';
+import ExternalLink from '../ExternalLink.astro';
 ---
-<section id="about" class="section" aria-labelledby="about-title" tabindex="-1"><div class="container"><h1 id="about-title" class="page-title about-title">About & What We Do</h1><div class="about-grid"><div><h2>Our Mission</h2><p class="mission-statement">{data.missionStatement}</p></div><div><h2>What is Science Olympiad?</h2><p>{data.about.science}</p></div></div><div class="resource-row">{data.links.map(link=><a class="text-link" href={link.url}>{link.label} ↗</a>)}</div><Team/></div></section>
+<section id="about" class="section" aria-labelledby="about-title" tabindex="-1"><div class="container"><h1 id="about-title" class="page-title about-title">About & What We Do</h1><div class="about-grid"><div><h2>Our Mission</h2><p class="mission-statement">{data.missionStatement}</p></div><div><h2>What is Science Olympiad?</h2><p>{data.about.science}</p></div></div><div class="resource-row">{data.links.map(link=><ExternalLink class="text-link" href={link.url}>{link.label}</ExternalLink>)}</div><Team/></div></section>

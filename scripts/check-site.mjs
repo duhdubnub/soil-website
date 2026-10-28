@@ -143,6 +143,14 @@ assert(detail.includes('<title>2027 SOIL Satellite Invitational | Science Olympi
 assert(tournament.includes('href="/invitational/"'));
 assert(!detail.includes('application/ld+json'));
 for(const page of [...Object.values(pages),detail,notFound]){
+ // Link rule: → only on internal links; ↗ only on external links, which open in a new tab and say so to screen readers; email links show no arrow.
+ for(const [,attrs,text] of page.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)){
+  const href=attrs.match(/href="([^"]*)"/)?.[1]??'';
+  const newTabText=/\(opens in a new tab\)/.test(attrs+text);
+  if(/^https?:/.test(href))assert(attrs.includes('target="_blank"')&&attrs.includes('rel="noopener noreferrer"')&&newTabText&&!text.includes('→'),`External link opens in a new tab: ${href}`);
+  else assert(!text.includes('↗')&&!attrs.includes('target="_blank"')&&!newTabText,`Internal or email link has no external marker: ${href}`);
+  if(href.startsWith('mailto:'))assert(!/[→↗]/.test(text)&&text.includes(href.slice(7)),`Email link shows its address: ${href}`);
+ }
  assert.equal((page.match(/<h1\b/g)||[]).length,1);
  assert(page.includes('/fonts/Geist-Variable.woff2')&&page.includes('font-display:swap'));
  assert(page.includes('alt="Science Olympiad logo"'));
