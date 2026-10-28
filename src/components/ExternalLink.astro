@@ -1,0 +1,5 @@
+---
+// Site-wide link rule: ↗ marks an external link that opens in a new tab (and says so to screen readers); → marks an internal link.
+const {href,class:className}=Astro.props;
+---
+<a class={className} href={href} target="_blank" rel="noopener noreferrer"><slot/> <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a>

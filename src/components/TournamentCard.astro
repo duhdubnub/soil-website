@@ -15,7 +15,7 @@ const base=import.meta.env.BASE_URL.replace(/\/$/,'');
       <p class="tournament-description">{description(tournament)}</p>
       <TournamentInfo label="Divisions" value={tournament.divisions}/>
       <div class="tournament-actions">
-        {tournament.id==='2027-soil-invitational'&&<a class="button tournament-primary" href={`${base}/invitational/`}>Invitational Details</a>}
+        {tournament.id==='2027-soil-invitational'&&<a class="button tournament-primary" href={`${base}/invitational/`}>Invitational Details <span aria-hidden="true">→</span></a>}
         {registrationUrl?<a class="button button-outline" href={registrationUrl} target="_blank" rel="noopener noreferrer" aria-label={`Register your team for ${display(tournament.name)} (opens in a new tab)`}>Register Your Team ↗</a>:<button class="button button-outline tournament-disabled" type="button" disabled aria-disabled="true">Registration opens soon</button>}
       </div>
     </div>
