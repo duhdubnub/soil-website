@@ -1,0 +1,15 @@
+---
+// Animated background behind the home hero and the 404 page: rotating rings with orbiting dots and drifting particles.
+// Floating background particles: position, drift distance, timing and shape (dot, ring or plus).
+const particles=[
+  {x:'9%',y:'22%',dx:'26px',dy:'-34px',d:'17s',delay:'-4s',kind:'dot'},
+  {x:'18%',y:'72%',dx:'-20px',dy:'-28px',d:'21s',delay:'-11s',kind:'plus'},
+  {x:'27%',y:'12%',dx:'18px',dy:'30px',d:'19s',delay:'-7s',kind:'ring'},
+  {x:'34%',y:'88%',dx:'30px',dy:'-18px',d:'23s',delay:'-2s',kind:'dot'},
+  {x:'68%',y:'14%',dx:'-24px',dy:'26px',d:'20s',delay:'-9s',kind:'plus'},
+  {x:'74%',y:'80%',dx:'22px',dy:'-32px',d:'18s',delay:'-13s',kind:'ring'},
+  {x:'86%',y:'48%',dx:'-28px',dy:'-20px',d:'24s',delay:'-5s',kind:'dot'},
+  {x:'93%',y:'86%',dx:'-18px',dy:'-26px',d:'16s',delay:'-8s',kind:'plus'}
+];
+---
+<div class="orbital-field" aria-hidden="true"><span><b class="electron"><b></b></b></span><span><b class="electron"><b></b></b></span><i></i><div class="hero-particles">{particles.map(p=><span class={`particle particle-${p.kind}`} style={`--x:${p.x};--y:${p.y};--dx:${p.dx};--dy:${p.dy};--d:${p.d};--delay:${p.delay}`}></span>)}</div></div>

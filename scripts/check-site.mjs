@@ -11,7 +11,7 @@ const pages=Object.fromEntries(order.map(id=>[id,readFileSync(id==='home'?'dist/
 // Google Search Console ownership file: must stay published unchanged at the site root, or Google revokes verification.
 const googleVerification='google26416d21fdc69b58.html';
 assert.equal(readFileSync(join('dist',googleVerification),'utf8').trim(),`google-site-verification: ${googleVerification}`,'Google Search Console verification file');
-assert.equal(files('dist').filter(f=>f.endsWith('.html')&&!f.endsWith(googleVerification)).length,order.length+1,'Main pages and invitational page');
+assert.equal(files('dist').filter(f=>f.endsWith('.html')&&!f.endsWith(googleVerification)).length,order.length+2,'Main pages, invitational page and 404 page');
 for(const [id,html] of Object.entries(pages)){
  const sections=[...html.matchAll(/<section\b[^>]*\bid="([^"]+)"/g)].map(m=>m[1]);
  assert.deepEqual(sections,id==='home'?['home','highlights']:[id],`Sections on ${id}`);
@@ -80,6 +80,10 @@ assert.equal((hero.match(/<p\b/g)||[]).length,1,'Only mission paragraph in hero'
 assert(hero.indexOf('href="/join/"')<hero.indexOf('href="/about/"'),'Hero buttons link to Join and About pages');
 const joinSection=pages.join.match(/<section id="join"[\s\S]*?<\/section>/)[0];
 assert(joinSection.includes(`<p>${data.joinIntro}</p>`),'Join page description');
+// Membership facts sit between the intro and the sign-up cards, in data order.
+const joinFacts=[...(joinSection.match(/<dl class="join-facts">[\s\S]*?<\/dl>/)?.[0]??'').matchAll(/<dt>([^<]+)<\/dt><dd>([^<]+)<\/dd>/g)].map(m=>({label:m[1],value:m[2]}));
+assert.deepEqual(joinFacts,data.joinFacts,'Join membership facts');
+if(joinFacts.length)assert(joinSection.indexOf(data.joinIntro)<joinSection.indexOf('join-facts')&&joinSection.indexOf('join-facts')<joinSection.indexOf('join-cards'),'Join facts between intro and cards');
 let previous=-1;
 for(const link of data.joinLinks){const index=joinSection.indexOf(`href="${link.url}"`);assert(index>previous,'Join link order');previous=index}
 const tournament=pages.tournaments.match(/<section id="tournaments"[\s\S]*?<\/section>/)[0];
@@ -116,16 +120,29 @@ if(data.gallery.length){
  assert(galleryBlock.includes('id="gallery-title">Gallery</h2>')&&pages.community.indexOf('class="highlight-grid')<pages.community.indexOf('id="gallery"'),'Gallery follows Community cards');
  const photos=[...galleryBlock.matchAll(/<figure>[\s\S]*?<\/figure>/g)].map(m=>m[0]);
  assert.equal(photos.length,data.gallery.length,'One figure per gallery photo');
- data.gallery.forEach((photo,i)=>assert(photo.alt.trim()&&photos[i].includes(`alt="${photo.alt}"`),`Gallery photo ${i+1} has alt text`));
+ data.gallery.forEach((photo,i)=>assert(photo.alt.trim()&&photos.some(figure=>figure.includes(`alt="${photo.alt}"`)),`Gallery photo ${i+1} has alt text`));
+ data.gallery.filter(photo=>photo.caption).forEach(photo=>assert(photos.some(figure=>figure.includes(`src="${photo.src}"`)&&figure.includes(`<figcaption>${photo.caption}</figcaption>`)),`Gallery caption stays with ${photo.src}`));
+ const months=['january','february','march','april','may','june','july','august','september','october','november','december'];
+ const dates=photos.map(figure=>{const m=figure.match(/<figcaption>\[(\w+)\s+(\d{4})\]/);return m?Number(m[2])*12+Math.max(months.indexOf(m[1].toLowerCase()),0):-1});
+ assert(dates.every((date,i)=>i===0||dates[i-1]>=date),'Gallery runs newest to oldest');
 }else assert(!galleryBlock,'Gallery hidden when there are no photos');
 assert(pages.community.includes(`<p>${data.communityIntro.replaceAll("'",'&#39;')}</p>`),'Community intro');
-console.log('Passed: six pages, page navigation, home highlights, tournament pending states, hero, join links and compliance copy.');
+// 404 page: GitHub Pages serves dist/404.html for any missing address, at any depth, so every link and asset must be root-relative.
+const notFound=readFileSync('dist/404.html','utf8');
+assert(notFound.includes('<title>Page Not Found | Science Olympiad at Illinois</title>')&&notFound.includes('<meta name="robots" content="noindex">'),'404 title and noindex');
+assert(!notFound.includes('rel="canonical"')&&!notFound.includes('og:url')&&!notFound.includes('application/ld+json'),'404 has no canonical address or structured data');
+assert(notFound.includes('id="not-found-title">Page not found</h1>')&&notFound.includes('class="orbital-field"'),'404 heading and branded background');
+assert(notFound.includes('href="/">Back to Home')&&notFound.includes('class="site-header"')&&notFound.includes('<footer>'),'404 keeps site navigation and footer');
+assert(!/aria-current/.test(notFound.match(/<nav id="navigation"[\s\S]*?<\/nav>/)[0]),'404 marks no nav item as current');
+for(const [,path] of notFound.matchAll(/(?:href|src)="([^"]*)"/g))assert(/^(\/|#|https?:|mailto:)/.test(path),`404 link works from any address: ${path}`);
+assert(!/UIUC|\bSciOly\b|\[TODO/i.test(notFound)&&!/(?<!Science )\bOlympiad\b/.test(notFound.replace(/<[^>]*>/g,'')),'404 naming rules');
+console.log('Passed: six pages, page navigation, home highlights, tournament pending states, hero, join links, compliance copy and 404 page.');
 
 const detail=readFileSync('dist/invitational/index.html','utf8');
 assert(detail.includes('<title>2027 SOIL Satellite Invitational | Science Olympiad at Illinois</title>'));
 assert(tournament.includes('href="/invitational/"'));
 assert(!detail.includes('application/ld+json'));
-for(const page of [...Object.values(pages),detail]){
+for(const page of [...Object.values(pages),detail,notFound]){
  assert.equal((page.match(/<h1\b/g)||[]).length,1);
  assert(page.includes('/fonts/Geist-Variable.woff2')&&page.includes('font-display:swap'));
  assert(page.includes('alt="Science Olympiad logo"'));
