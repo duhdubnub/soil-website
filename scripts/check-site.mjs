@@ -20,8 +20,8 @@ for(const [id,html] of Object.entries(pages)){
  const nav=html.match(/<nav id="navigation"[\s\S]*?<\/nav>/)[0];
  assert.deepEqual([...nav.matchAll(/href="([^"]+)"/g)].map(m=>m[1]),order.map(url),'Navigation page order');
  assert.deepEqual([...nav.matchAll(/<a href="([^"]+)" aria-current="page"/g)].map(m=>m[1]),[url(id)],`Current page ${id}`);
- // "SciOly" appears only as the nickname in the footer and structured data, plus social handles and the domain (which never match \bSciOly\b).
- const akaFooter=`<span class="footer-aka">${data.nickname}</span>`;
+ // "SciOly" appears only as a nickname (the first in the footer, all in structured data), plus social handles and the domain (which never match \bSciOly\b).
+ const akaFooter=`<span class="footer-aka">${data.nicknames[0]}</span>`;
  assert(html.includes(akaFooter),`Footer nickname on ${id}`);
  assert(!/UIUC|Fighting Illini|\bSciOly\b/i.test(html.replace(akaFooter,'').replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/,'')),'Naming restrictions');
  assert(!/(?<!Science )\bOlympiad\b/.test(html.replace(/<[^>]*>/g,'')),'Science Olympiad written in full');
@@ -53,7 +53,7 @@ for(const text of Object.values(data.seo))assert(text.length<=155,`Description f
 assert(pages.home.includes(`<title>${data.name} | ${data.shortName}</title>`),'Home title is the club name followed by SOIL');
 const ld=JSON.parse(pages.home.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
 const website=ld['@graph'].find(n=>n['@type']==='WebSite'), org=ld['@graph'].find(n=>n['@type']==='Organization');
-assert.deepEqual([website.alternateName,org.alternateName],[[data.shortName,data.nickname],[data.shortName,data.nickname]],'Alternate names SOIL and nickname');
+assert.deepEqual([website.alternateName,org.alternateName],[[data.shortName,...data.nicknames],[data.shortName,...data.nicknames]],'Alternate names SOIL and nicknames');
 assert(website.name===data.name&&website.url===data.url&&org.name===data.name&&org.url===data.url&&org.email===data.email,'WebSite and Organization structured data');
 assert.deepEqual(org.sameAs,data.joinLinks.map(link=>link.url),'Organization profile links');
 // Crawling: robots.txt points at the generated sitemap, which lists every page on the domain.
@@ -139,7 +139,7 @@ assert(notFound.includes('id="not-found-title">Page not found</h1>')&&notFound.i
 assert(notFound.includes('href="/">Back to Home')&&notFound.includes('class="site-header"')&&notFound.includes('<footer>'),'404 keeps site navigation and footer');
 assert(!/aria-current/.test(notFound.match(/<nav id="navigation"[\s\S]*?<\/nav>/)[0]),'404 marks no nav item as current');
 for(const [,path] of notFound.matchAll(/(?:href|src)="([^"]*)"/g))assert(/^(\/|#|https?:|mailto:)/.test(path),`404 link works from any address: ${path}`);
-assert(!/UIUC|\bSciOly\b|\[TODO/i.test(notFound.replace(`<span class="footer-aka">${data.nickname}</span>`,''))&&!/(?<!Science )\bOlympiad\b/.test(notFound.replace(/<[^>]*>/g,'')),'404 naming rules');
+assert(!/UIUC|\bSciOly\b|\[TODO/i.test(notFound.replace(`<span class="footer-aka">${data.nicknames[0]}</span>`,''))&&!/(?<!Science )\bOlympiad\b/.test(notFound.replace(/<[^>]*>/g,'')),'404 naming rules');
 console.log('Passed: six pages, page navigation, home highlights, tournament pending states, hero, join links, compliance copy and 404 page.');
 
 const detail=readFileSync('dist/invitational/index.html','utf8');
