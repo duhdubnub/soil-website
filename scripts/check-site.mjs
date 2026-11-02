@@ -79,9 +79,12 @@ data.officers.forEach((officer,i)=>{
  if(officer.email)assert(officerCards[i].includes(`href="mailto:${officer.email}"`),`${officer.name} email link`);
 });
 const hero=pages.home.match(/<section id="home"[\s\S]*?<\/section>/)[0];
-assert(hero.indexOf('hero-logo')<hero.indexOf('<h1')&&hero.indexOf('<h1')<hero.indexOf('hero-mission')&&hero.indexOf('hero-mission')<hero.indexOf('hero-actions'),'Hero order');
-assert.equal((hero.match(/<p\b/g)||[]).length,1,'Only mission paragraph in hero');
-assert(hero.indexOf('href="/join/"')<hero.indexOf('href="/about/"'),'Hero buttons link to Join and About pages');
+// Hero: logo, name, introduction, About Us, then the join sentence with its Join the Club button.
+assert(hero.includes(`<p class="hero-intro">${data.intro}<span class="hero-est">Est. ${data.established}</span></p>`),'Hero introduction');
+const heroOrder=['hero-logo','<h1','hero-intro','href="/about/"','hero-join','hero-mission','href="/join/"'].map(s=>hero.indexOf(s));
+assert(heroOrder.every((n,i)=>n>=0&&(i===0||n>heroOrder[i-1])),'Hero order');
+assert.equal((hero.match(/<p\b/g)||[]).length,2,'Only introduction and join paragraphs in hero');
+assert(/href="\/about\/">About Us <span aria-hidden="true">→<\/span>/.test(hero)&&/href="\/join\/">Join the Club <span aria-hidden="true">→<\/span>/.test(hero)&&!hero.includes('Learn More'),'Hero buttons: About Us and Join the Club');
 const joinSection=pages.join.match(/<section id="join"[\s\S]*?<\/section>/)[0];
 assert(joinSection.includes(`<p>${data.joinIntro}</p>`),'Join page description');
 // Membership facts sit between the intro and the sign-up cards, in data order.
