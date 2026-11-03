@@ -48,6 +48,7 @@ for(const [id,html] of Object.entries(pages)){
  }
 }
 const all=Object.values(pages).join('');
+for(const officer of data.officers)if(officer.email)assert(!all.includes(officer.email),`${officer.name}'s full email address is not in the built pages`);
 assert.equal(new Set(Object.values(data.seo)).size,Object.keys(data.seo).length,'Unique page descriptions');
 for(const text of Object.values(data.seo))assert(text.length<=155,`Description fits search snippet: ${text}`);
 assert(pages.home.includes(`<title>${data.name} | ${data.shortName}</title>`),'Home title is the club name followed by SOIL');
@@ -76,12 +77,14 @@ data.officers.forEach((officer,i)=>{
  assert(officerCards[i].includes(`<h3>${esc(officer.name)}</h3>`)&&officerCards[i].includes(esc(officer.role)),`Officer ${officer.name} in order`);
  if(officer.favoriteEvent)assert(officerCards[i].includes(esc(officer.favoriteEvent)),`${officer.name} favorite event`);
  if(officer.favoriteMemory)assert(officerCards[i].includes(esc(officer.favoriteMemory)),`${officer.name} favorite memory`);
- if(officer.email)assert(officerCards[i].includes(`href="mailto:${officer.email}"`),`${officer.name} email link`);
+ // Officer emails are written as "name [@] illinois.edu" with no mailto link so bots cannot harvest them.
+ if(officer.email)assert(officerCards[i].includes(`<span>${officer.email.replace("@"," [@] ")}</span>`)&&!officerCards[i].includes("mailto:"),`${officer.name} email shown as [@]`);
 });
 const hero=pages.home.match(/<section id="home"[\s\S]*?<\/section>/)[0];
 // Hero: logo, name, introduction, About Us, then the join sentence with its Join the Club button.
 assert(hero.includes(`<p class="hero-intro">${data.intro}<span class="hero-est">Est. ${data.established}</span></p>`),'Hero introduction');
 const heroOrder=['hero-logo','<h1','hero-intro','href="/about/"','hero-join','hero-mission','href="/join/"'].map(s=>hero.indexOf(s));
+assert(hero.includes(`<a class="scroll-cue" href="#highlights"><span aria-hidden="true">↓</span>Scroll for more information</a>`)&&pages.home.includes(`<section id="highlights"`),"Hero scroll cue points to the highlights");
 assert(heroOrder.every((n,i)=>n>=0&&(i===0||n>heroOrder[i-1])),'Hero order');
 assert.equal((hero.match(/<p\b/g)||[]).length,2,'Only introduction and join paragraphs in hero');
 assert(/href="\/about\/">About Us <span aria-hidden="true">→<\/span>/.test(hero)&&/href="\/join\/">Join the Club <span aria-hidden="true">→<\/span>/.test(hero)&&!hero.includes('Learn More'),'Hero buttons: About Us and Join the Club');
