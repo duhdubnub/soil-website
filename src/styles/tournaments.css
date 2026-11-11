@@ -10,3 +10,6 @@
 @media(min-width:701px){.tournament-card{padding:52px}.tournament-actions{flex-direction:row;flex-wrap:wrap;align-items:center}.tournament-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:1000px){#navigation{gap:20px}}
 @media(max-width:700px){.tournament-contact a{margin-left:0;margin-top:8px;display:block;width:fit-content}}
+.tournament-card .tournament-interest{background:#d9eaff;border-color:#d9eaff;color:var(--navy)}
+.tournament-card .tournament-interest:hover{background:#fff;border-color:#fff;color:var(--navy)}
+.tournament-interest-note{margin:12px 0 0;color:#dce4ec;font-size:14px;line-height:1.6}

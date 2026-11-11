@@ -102,7 +102,7 @@ assert(tournament.includes('class="tournament-info"'),'Shared info lines');
 const tournaments=JSON.parse(readFileSync('src/data/tournaments.json','utf8')).tournaments;
 if(tournaments.length===1){
  const t=tournaments[0];
- if(!t.registration?.url)assert(tournament.includes('aria-disabled="true"')&&tournament.includes('Registration opens soon'),'Registration unavailable');
+ if(!t.registration?.url && !t.interestFormUrl)assert(tournament.includes('aria-disabled="true"')&&tournament.includes('Registration opens soon'),'Registration unavailable');
  if(!t.events?.length)assert(!tournament.includes('Event list to be announced'),'Events kept on details page');
  if(!t.schedule?.length)assert(!tournament.includes('Schedule to be announced'),'Schedule kept on details page');
  if(!t.contactEmail)assert(tournament.includes('href="/contact/"'),'Contact fallback');
@@ -173,6 +173,14 @@ for(const page of [...Object.values(pages),detail,notFound]){
  }
 }
 const event=tournaments.find(t=>t.id==='2027-soil-invitational');
+if(!event.registration?.url && event.interestFormUrl){
+ const registrationSection=detail.match(/<section id="registration"[\s\S]*?<\/section>/)[0];
+ for(const section of [tournament,registrationSection]){
+  const links=[...section.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)];
+  assert(links.some(([,attrs,text])=>attrs.includes(`href="${esc(event.interestFormUrl)}"`)&&text.startsWith('Interest Form')),'Interest form link');
+  assert(section.includes('Registration opens soon. This form is for interest only.'),'Interest-only registration copy');
+ }
+}
 for(const [id,present] of [['updates',!!event.updates?.length],['volunteer',!!event.volunteerUrl],['team',!!event.team?.length]]){
  assert.equal(detail.includes(`id="${id}"`),present);
  assert.equal(detail.includes(`data-event-link="${id}"`),present);
