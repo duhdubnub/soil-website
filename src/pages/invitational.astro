@@ -10,7 +10,6 @@ const t=data.tournaments.find(t=>t.id==='2027-soil-invitational')!;
 const base=import.meta.env.BASE_URL.replace(/\/$/,'');
 const registration=t.registration??{};
 const registrationUrl=externalUrl(registration.url);
-const interestFormUrl=externalUrl(t.interestFormUrl);
 const platformUrl=externalUrl(t.platformUrl);
 const volunteerUrl=externalUrl(t.volunteerUrl);
 const updates=[...(t.updates??[])].sort((a,b)=>String(b.date??'').localeCompare(String(a.date??'')));
@@ -36,14 +35,9 @@ const sections=[['About','about'],['Registration','registration'],['Events','eve
     </section>
     <section id="registration" data-event-section tabindex="-1" aria-labelledby="registration-title">
       <h2 id="registration-title">Registration</h2>
-      {!registrationUrl && interestFormUrl && (
-        <p id="registration-interest-note">Registration opens soon. This form is for interest only.</p>
-      )}
       <div class="tournament-actions">
         {registrationUrl ? (
-          <ExternalLink class="button" href={registrationUrl}>Register Your Team</ExternalLink>
-        ) : interestFormUrl ? (
-          <ExternalLink class="button" href={interestFormUrl} aria-describedby="registration-interest-note">Interest Form</ExternalLink>
+          <ExternalLink class="button" href={registrationUrl}>Register on Scilympiad</ExternalLink>
         ) : (
           <button class="button tournament-disabled" disabled aria-disabled="true">Registration opens soon</button>
         )}

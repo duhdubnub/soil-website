@@ -102,7 +102,7 @@ assert(tournament.includes('class="tournament-info"'),'Shared info lines');
 const tournaments=JSON.parse(readFileSync('src/data/tournaments.json','utf8')).tournaments;
 if(tournaments.length===1){
  const t=tournaments[0];
- if(!t.registration?.url && !t.interestFormUrl)assert(tournament.includes('aria-disabled="true"')&&tournament.includes('Registration opens soon'),'Registration unavailable');
+ if(!t.registration?.url)assert(tournament.includes('aria-disabled="true"')&&tournament.includes('Registration opens soon'),'Registration unavailable');
  if(!t.events?.length)assert(!tournament.includes('Event list to be announced'),'Events kept on details page');
  if(!t.schedule?.length)assert(!tournament.includes('Schedule to be announced'),'Schedule kept on details page');
  if(!t.contactEmail)assert(tournament.includes('href="/contact/"'),'Contact fallback');
@@ -114,7 +114,8 @@ const cards=[...highlights.matchAll(/<article class="highlight-card[\s\S]*?<\/ar
 assert.equal(cards.length,2,'Two highlight cards');
 assert(cards[0].includes('Community Impact')&&cards[0].includes('href="/community/"'),'Community Impact card links to Community page');
 assert(cards[0].includes(data.communityImpact.replaceAll("'",'&#39;'))&&!cards[0].includes('TODO'),'Community Impact card text');
-assert(cards[1].includes(featured.name)&&cards[1].includes('href="/tournaments/"')&&cards[1].includes('Info + Register'),'Tournament card links to Tournaments page');
+assert(cards[1].includes(featured.name),'Featured tournament card');
+if(!featured.registration?.url)assert(cards[1].includes('href="/tournaments/"')&&cards[1].includes('Tournament Info'),'Featured tournament info link');
 // Community page: one card per communityCards entry, side by side, with the email (or its placeholder) on contact cards.
 const communityCards=[...pages.community.matchAll(/<article class="highlight-card">[\s\S]*?<\/article>/g)].map(m=>m[0]);
 assert.equal(communityCards.length,data.communityCards.length,'Community cards');
@@ -173,13 +174,12 @@ for(const page of [...Object.values(pages),detail,notFound]){
  }
 }
 const event=tournaments.find(t=>t.id==='2027-soil-invitational');
-if(!event.registration?.url && event.interestFormUrl){
- const registrationSection=detail.match(/<section id="registration"[\s\S]*?<\/section>/)[0];
- for(const section of [tournament,registrationSection]){
-  const links=[...section.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)];
-  assert(links.some(([,attrs,text])=>attrs.includes(`href="${esc(event.interestFormUrl)}"`)&&text.startsWith('Interest Form')),'Interest form link');
-  assert(section.includes('Registration opens soon. This form is for interest only.'),'Interest-only registration copy');
- }
+const registrationSection=detail.match(/<section id="registration"[\s\S]*?<\/section>/)[0];
+assert.equal(event.registration.url,'https://scilympiad.com/soil');
+for(const section of [cards[1],tournament,registrationSection]){
+ const links=[...section.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)];
+ assert(links.some(([,attrs,text])=>attrs.includes(`href="${esc(event.registration.url)}"`)&&text.startsWith('Register on Scilympiad')),'Official registration link');
+ assert(!/interest form|interest only|registration opens soon/i.test(section),'No pre-registration wording');
 }
 for(const [id,present] of [['updates',!!event.updates?.length],['volunteer',!!event.volunteerUrl],['team',!!event.team?.length]]){
  assert.equal(detail.includes(`id="${id}"`),present);
