@@ -9,7 +9,11 @@
       "dateEnd": "2027-02-13",
       "divisions": "B & C",
       "teamCap": null,
-      "fee": null,
+      "fee": [
+        { "region": "Illinois, outside Northeast Region 2", "amount": "$10" },
+        { "region": "Illinois, Northeast Region 2", "amount": "$50" },
+        { "region": "Out of state", "amount": "$80" }
+      ],
       "registration": {
         "url": "https://scilympiad.com/soil"
       },

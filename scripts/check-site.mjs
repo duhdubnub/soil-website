@@ -192,7 +192,7 @@ assert(/href="\/tournaments\/" aria-current="page"/.test(detail));
 console.log('Passed: invitational routing, conditional navigation, shared assets, font preload, and pending content.');
 
 const facts=detail.match(/<h3>Key facts<\/h3>([\s\S]*?)<\/section>/)[1];
-assert.deepEqual([...facts.matchAll(/<strong>([^<]+):<\/strong>/g)].map(m=>m[1]),['Date','Divisions','Teams','Fee']);
+assert.deepEqual([...facts.matchAll(/<strong\b[^>]*>([^<]+):<\/strong>/g)].map(m=>m[1]),['Date','Divisions','Teams','Fee']);
 assert.equal((tournament.match(/class="tournament-info"/g)||[]).length,1);
 assert(!tournament.includes('Teams:')&&!tournament.includes('Fee:'));
 assert(tournament.indexOf('<h3>')<tournament.indexOf('tournament-date'));

@@ -31,7 +31,20 @@ const sections=[['About','about'],['Registration','registration'],['Events','eve
       <TournamentInfo label="Date"><TournamentDate value={t.date} endValue={t.dateEnd}/></TournamentInfo>
       <TournamentInfo label="Divisions" value={t.divisions}/>
       <TournamentInfo label="Teams" value={t.teamCap}/>
-      <TournamentInfo label="Fee" value={t.fee}/>
+      {Array.isArray(t.fee) && t.fee.length ? (
+        <div class="tournament-info event-fee-details">
+          <div>
+            <strong id="fee-label">Fee:</strong>
+            <ul class="event-fees" aria-labelledby="fee-label">
+              {t.fee.map(({region, amount}) => <li>{region} ({amount} per team)</li>)}
+            </ul>
+          </div>
+          <img class="event-region-map"
+            src="https://scilympiad.com/data/org/soil/page/img/14173815.png"
+            alt="Map of Illinois competition regions. Northeast Region 2 covers Cook, DuPage, Grundy, Kane, Kankakee, Kendall, Lake, McHenry, and Will counties."
+            width="535" height="768" loading="lazy"/>
+        </div>
+      ) : <TournamentInfo label="Fee" value={t.fee}/>}
     </section>
     <section id="registration" data-event-section tabindex="-1" aria-labelledby="registration-title">
       <h2 id="registration-title">Registration</h2>
